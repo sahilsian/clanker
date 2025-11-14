@@ -129,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 247879919}
   - component: {fileID: 247879918}
+  - component: {fileID: 247879920}
   m_Layer: 0
   m_Name: Skeleton
   m_TagString: Player
@@ -211,6 +212,19 @@ Transform:
   - {fileID: 1404767421}
   m_Father: {fileID: 1560497895}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &247879920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247879915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1094b2a133708474a9ec95ed1b301eb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  weaponSprite: {fileID: 385415010}
 --- !u!1 &290992079
 GameObject:
   m_ObjectHideFlags: 0
@@ -2779,7 +2793,7 @@ GameObject:
   - component: {fileID: 385415011}
   - component: {fileID: 385415012}
   m_Layer: 0
-  m_Name: Iicon_32_05_0
+  m_Name: WeaponSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

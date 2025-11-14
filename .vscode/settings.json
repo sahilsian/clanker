@@ -67,5 +67,5 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "clanker.slnx"
+    "dotnet.defaultSolution": "Clanker.slnx"
 }

@@ -11,14 +11,24 @@ public enum GameState
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
+
     [Header("UI Groups")]
-    public GameObject hudGroup;        // HUD_Group (health bar, etc.)
-    public GameObject startScreen;     // StartScreen panel
-    public GameObject pauseScreen;     // PauseScreen panel
-    public GameObject gameOverScreen;  // GameOverScreen panel
+    public GameObject hudGroup;
+    public GameObject startScreen;
+    public GameObject pauseScreen;
+    public GameObject gameOverScreen;
 
     [Header("State")]
     public GameState currentState = GameState.Start;
+
+    // NEW — Dialogue freeze flag
+    public bool isDialogueActive = false;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void Start()
     {
@@ -27,7 +37,9 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        // Toggle Pause
+        // Disable pause during dialogue
+        if (isDialogueActive) return;
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (currentState == GameState.Playing)
@@ -41,7 +53,6 @@ public class GameManager : MonoBehaviour
     {
         currentState = newState;
 
-        // Show screens based on state
         if (startScreen != null)
             startScreen.SetActive(newState == GameState.Start);
 
@@ -54,26 +65,36 @@ public class GameManager : MonoBehaviour
         if (hudGroup != null)
             hudGroup.SetActive(newState == GameState.Playing);
 
-        // Time control
         switch (newState)
         {
             case GameState.Start:
             case GameState.Paused:
             case GameState.GameOver:
-                Time.timeScale = 0f;   // freeze game
+                Time.timeScale = 0f;
                 break;
 
             case GameState.Playing:
-                Time.timeScale = 1f;   // run game
+                Time.timeScale = 1f;
                 break;
         }
+    }
+
+    // -------- Dialogue Hooks --------
+
+    public void BeginDialogue()
+    {
+        isDialogueActive = true;
+    }
+
+    public void EndDialogue()
+    {
+        isDialogueActive = false;
     }
 
     // -------- Button callbacks --------
 
     public void OnStartButton()
     {
-        Debug.Log("StartButton clicked");
         SetState(GameState.Playing);
     }
 
@@ -88,7 +109,6 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    // Call this from player when HP reaches 0
     public void ShowGameOver()
     {
         SetState(GameState.GameOver);

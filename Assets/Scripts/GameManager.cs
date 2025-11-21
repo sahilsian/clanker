@@ -1,143 +1,96 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum GameState
+{
+    Start,
+    Playing,
+    Paused,
+    GameOver
+}
+
 public class GameManager : MonoBehaviour
 {
-    public enum GameState
-    {
-        StartMenu,
-        Playing,
-        Paused,
-        GameOver
-    }
+    [Header("UI Groups")]
+    public GameObject hudGroup;        // HUD_Group (health bar, etc.)
+    public GameObject startScreen;     // StartScreen panel
+    public GameObject pauseScreen;     // PauseScreen panel
+    public GameObject gameOverScreen;  // GameOverScreen panel
 
-    public static GameManager Instance { get; private set; }
-
-    [SerializeField]
-    private GameUIManager uiManager;
-
-    public GameState CurrentState { get; private set; } = GameState.StartMenu;
-
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-    }
+    [Header("State")]
+    public GameState currentState = GameState.Start;
 
     private void Start()
     {
-        if (uiManager == null)
-        {
-            uiManager = FindObjectOfType<GameUIManager>();
-        }
-
-        if (uiManager != null)
-        {
-            uiManager.Initialize(this);
-        }
-        else
-        {
-            Debug.LogError("GameUIManager not found in the scene.");
-        }
-
-        EnterStartMenu();
+        SetState(GameState.Start);
     }
 
     private void Update()
     {
+        // Toggle Pause
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            TogglePause();
+            if (currentState == GameState.Playing)
+                SetState(GameState.Paused);
+            else if (currentState == GameState.Paused)
+                SetState(GameState.Playing);
         }
     }
 
-    public void RegisterUI(GameUIManager manager)
+    public void SetState(GameState newState)
     {
-        uiManager = manager;
-        uiManager.Initialize(this);
-    }
+        currentState = newState;
 
-    private void EnterStartMenu()
-    {
-        CurrentState = GameState.StartMenu;
-        Time.timeScale = 0f;
-        uiManager?.ShowStartMenu();
-    }
+        // Show screens based on state
+        if (startScreen != null)
+            startScreen.SetActive(newState == GameState.Start);
 
-    public void StartGame()
-    {
-        if (CurrentState == GameState.Playing)
-            return;
+        if (pauseScreen != null)
+            pauseScreen.SetActive(newState == GameState.Paused);
 
-        CurrentState = GameState.Playing;
-        Time.timeScale = 1f;
-        uiManager?.ShowHUD();
-    }
+        if (gameOverScreen != null)
+            gameOverScreen.SetActive(newState == GameState.GameOver);
 
-    public void TogglePause()
-    {
-        if (CurrentState == GameState.StartMenu || CurrentState == GameState.GameOver)
-            return;
+        if (hudGroup != null)
+            hudGroup.SetActive(newState == GameState.Playing);
 
-        if (CurrentState == GameState.Paused)
+        // Time control
+        switch (newState)
         {
-            ResumeGame();
+            case GameState.Start:
+            case GameState.Paused:
+            case GameState.GameOver:
+                Time.timeScale = 0f;   // freeze game
+                break;
+
+            case GameState.Playing:
+                Time.timeScale = 1f;   // run game
+                break;
         }
-        else
-        {
-            PauseGame();
-        }
     }
 
-    public void PauseGame()
+    // -------- Button callbacks --------
+
+    public void OnStartButton()
     {
-        if (CurrentState != GameState.Playing)
-            return;
-
-        CurrentState = GameState.Paused;
-        Time.timeScale = 0f;
-        uiManager?.ShowPauseMenu();
+        Debug.Log("StartButton clicked");
+        SetState(GameState.Playing);
     }
 
-    public void ResumeGame()
+    public void OnResumeButton()
     {
-        if (CurrentState != GameState.Paused)
-            return;
-
-        CurrentState = GameState.Playing;
-        Time.timeScale = 1f;
-        uiManager?.ShowHUD();
+        SetState(GameState.Playing);
     }
 
-    public void TriggerGameOver()
-    {
-        CurrentState = GameState.GameOver;
-        Time.timeScale = 0f;
-        uiManager?.ShowGameOver();
-    }
-
-    public void RestartLevel()
+    public void OnRestartButton()
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void ReturnToMainMenu()
+    // Call this from player when HP reaches 0
+    public void ShowGameOver()
     {
-        EnterStartMenu();
-    }
-
-    public void QuitGame()
-    {
-        Application.Quit();
-
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#endif
+        SetState(GameState.GameOver);
     }
 }

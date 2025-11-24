@@ -1899,7 +1899,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1474239590
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2139,7 +2139,9 @@ MonoBehaviour:
   startScreen: {fileID: 456761605}
   pauseScreen: {fileID: 590319993}
   gameOverScreen: {fileID: 392937705}
+  healthBar: {fileID: 0}
   currentState: 0
+  isDialogueActive: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

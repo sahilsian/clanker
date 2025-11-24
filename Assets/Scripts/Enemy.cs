@@ -10,9 +10,8 @@ public class Enemy : MonoBehaviour
     private Color originalColor;
 
     public float flashDuration = 0.1f;
-    public float shakeDuration = 0.1f;   // 抖动时长
-    public float shakeAmount = 0.1f;     // 抖动强度
-
+    public float shakeDuration = 0.1f;
+    public float shakeAmount = 0.1f;    
     private Vector3 originalPosition;
 
     private void Start()

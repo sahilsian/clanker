@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 9feeb9cdc61249f4b928be2c70715692
+guid: fa7820dd570ad294c9a97f87f79483d6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2366563100955221204
-    second: Weapon_icons_32_0
+      213: 65884448378986
+    second: road_signs_1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,17 +96,30 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Weapon_icons_32_0
+      name: road_signs_1_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 320
-        height: 128
+        width: 800
+        height: 600
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c236405f567482fd0800000000000000
-      internalID: -2366563100955221204
+      spriteID: a60542bebeb300000800000000000000
+      internalID: 65884448378986
       vertices: []
       indices: 
       edges: []
@@ -134,8 +147,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Weapon_icons_32_0: -2366563100955221204
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

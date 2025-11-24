@@ -11,20 +11,15 @@ public class UIBootstrapper : MonoBehaviour
     private GameObject startPanel;
     private GameObject pausePanel;
     private GameObject gameOverPanel;
-    private HealthBar healthBar;
-    private GameUIManager uiManager;
+    private HealthBar healthBar;      // or SimpleHealthBar if that's what you use
+    private GameManager gameManager;  // updated: use GameManager instead of GameUIManager
 
     void Awake()
     {
         CreateCanvas();
         CreatePanels();
         CreateHealthBar();
-        CreateUIManager();
-    }
-
-    void Start()
-    {
-        uiManager.ShowStartMenu();
+        CreateGameManager();
     }
 
     void CreateCanvas()
@@ -40,11 +35,14 @@ public class UIBootstrapper : MonoBehaviour
     {
         // HUD
         hudPanel = CreatePanel("HUD_Panel", new Color(0, 0, 0, 0f));
+
         // Start menu
         startPanel = CreatePanel("StartMenu_Panel", new Color(0, 0, 0, 0.7f));
+
         // Pause menu
         pausePanel = CreatePanel("PauseMenu_Panel", new Color(0, 0, 0, 0.7f));
         pausePanel.SetActive(false);
+
         // Game over
         gameOverPanel = CreatePanel("GameOver_Panel", new Color(0, 0, 0, 0.8f));
         gameOverPanel.SetActive(false);
@@ -101,20 +99,21 @@ public class UIBootstrapper : MonoBehaviour
         fillImage.fillAmount = 1f;
 
         // HealthBar logic
-        healthBar = bgGO.AddComponent<HealthBar>();
+        healthBar = bgGO.AddComponent<HealthBar>();  // or SimpleHealthBar
         healthBar.fillImage = fillImage;
         healthBar.maxHealth = maxHealth;
-        healthBar.SetHealth(maxHealth);
+        healthBar.SetHealth(maxHealth);              // adjust if your class uses a different API
     }
 
-    void CreateUIManager()
+    void CreateGameManager()
     {
-        GameObject uiManagerGO = new GameObject("UI_Manager");
-        uiManager = uiManagerGO.AddComponent<GameUIManager>();
+        GameObject gmGO = new GameObject("GameManagerObject");
+        gameManager = gmGO.AddComponent<GameManager>();
 
-        uiManager.hudPanel = hudPanel;
-        uiManager.startMenuPanel = startPanel;
-        uiManager.pauseMenuPanel = pausePanel;
-        uiManager.gameOverPanel = gameOverPanel;
+        // Wire the runtime-created panels into GameManager
+        gameManager.hudGroup      = hudPanel;
+        gameManager.startScreen   = startPanel;
+        gameManager.pauseScreen   = pausePanel;
+        gameManager.gameOverScreen = gameOverPanel;
     }
 }

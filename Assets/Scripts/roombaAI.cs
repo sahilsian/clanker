@@ -1,17 +1,17 @@
 using UnityEngine;
 
-// Handles the behavior for the "Rogue Roomba Bot" enemy
+// RESPONSIBILITY: Movement and Dealing Damage to Player
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(Collider2D))]
 public class RoombaAI : MonoBehaviour
 {
     [Header("Patrol")]
-    public Transform pointA; // The first patrol point
-    public Transform pointB; // The second patrol point
+    public Transform pointA;
+    public Transform pointB;
     public float patrolSpeed = 3f;
+    public int contactDamage = 1;
 
     [Header("Graphics")]
-    public Transform spriteTransform; // The bot's sprite (if separate)
+    public Transform spriteTransform; 
 
     private Rigidbody2D rb;
     private Transform currentTarget;
@@ -22,36 +22,28 @@ public class RoombaAI : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         
-        // Start by moving towards point B
+        // Default to current transform if not assigned
+        if (spriteTransform == null) spriteTransform = transform;
+        
+        // Start patrol
         currentTarget = pointB;
-        if (spriteTransform == null)
-        {
-            spriteTransform = transform; // Default to this object
-        }
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        if (currentTarget == null) return; // Don't do anything if no points are set
+        if (currentTarget == null) return; 
 
-        // Move towards the current target
+        // 1. Move
         float direction = (currentTarget.position.x > transform.position.x) ? 1 : -1;
         rb.linearVelocity = new Vector2(patrolSpeed * direction, rb.linearVelocity.y);
 
-        // Flip the sprite to face the direction of movement
-        if (direction > 0 && !isFacingRight)
-        {
-            Flip();
-        }
-        else if (direction < 0 && isFacingRight)
-        {
-            Flip();
-        }
+        // 2. Face Direction
+        if (direction > 0 && !isFacingRight) Flip();
+        else if (direction < 0 && isFacingRight) Flip();
 
-        // Check if we've reached the target
+        // 3. Switch Target when close
         if (Mathf.Abs(transform.position.x - currentTarget.position.x) < 0.5f)
         {
-            // Switch targets
             currentTarget = (currentTarget == pointB) ? pointA : pointB;
         }
     }
@@ -59,26 +51,34 @@ public class RoombaAI : MonoBehaviour
     private void Flip()
     {
         isFacingRight = !isFacingRight;
-        spriteTransform.localScale = new Vector3(-spriteTransform.localScale.x,
-                                                 spriteTransform.localScale.y,
-                                                 spriteTransform.localScale.z);
+        Vector3 scale = spriteTransform.localScale;
+        scale.x *= -1;
+        spriteTransform.localScale = scale;
     }
 
-    // This function is called by the PlayerController when the enemy is hit
-    public void Defeat()
-    {
-        Debug.Log("Roomba defeated!");
-        // TODO: Add explosion/death animation
-        Destroy(gameObject);
-    }
-
-    // This handles damaging the player
+    // Handles damaging the player if they touch the Roomba
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Roomba hit the player!");
-            // TODO: Add logic to damage the player
+            Debug.Log("Roomba hit the player! Ouch!");
+            // Apply contact damage using the PlayerCombat API
+            PlayerCombat pc = collision.gameObject.GetComponent<PlayerCombat>();
+            if (pc != null)
+            {
+                bool damaged = pc.TakeDamage(contactDamage, "Roomba");
+
+                // Apply knockback if player actually took damage
+                if (damaged)
+                {
+                    PlayerMovement pm = collision.gameObject.GetComponent<PlayerMovement>();
+                    if (pm != null)
+                    {
+                        Vector2 dir = (pm.transform.position - transform.position).normalized;
+                        pm.ApplyKnockback(dir, pm.knockbackForce);
+                    }
+                }
+            }
         }
     }
 }

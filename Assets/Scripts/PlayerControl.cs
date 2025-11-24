@@ -37,6 +37,14 @@ public class PlayerMovement : MonoBehaviour
     private bool isTouchingWall;
     private bool isWallSliding;
     public bool IsStomping { get; private set; }
+    [Header("Knockback")]
+    public float knockbackForce = 8f;
+    [Header("Knockback/Control")]
+    public float knockbackLockDuration = 0.15f;
+    private bool inputLocked = false;
+    [Header("Hurt Settings")]
+    [Tooltip("How long player input is locked when the player is hurt (in seconds)")]
+    public float hurtInputLockDuration = 0.25f;
 
     private void Start()
     {
@@ -121,6 +129,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnMove(InputValue value)
     {
+        if (inputLocked) return;
         Vector2 moveInput = value.Get<Vector2>();
         horizontalMove = moveInput.x;
     }
@@ -129,6 +138,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (value.isPressed)
         {
+            if (inputLocked) return;
             if (isGrounded)
             {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
@@ -167,6 +177,52 @@ public class PlayerMovement : MonoBehaviour
         Vector3 scale = transform.localScale;
         scale.x *= -1;
         transform.localScale = scale;
+    }
+
+    /// <summary>
+    /// Apply a knockback to the player away from an attacker.
+    /// </summary>
+    /// <param name="direction">Normalized direction away from attacker (playerPos - attackerPos)</param>
+    /// <param name="force">Scalar force to apply</param>
+    public void ApplyKnockback(Vector2 direction, float force)
+    {
+        if (rb == null) return;
+
+        // Ensure horizontal component is significant and add a small upward lift
+        float horizontal = direction.x * force;
+        float vertical = Mathf.Max(force * 0.45f, 0.5f);
+
+        // Cancel existing velocity and apply immediate knockback
+        // stop player movement input so FixedUpdate won't overwrite knockback
+        horizontalMove = 0f;
+        rb.linearVelocity = new Vector2(horizontal, vertical);
+
+        // If wall sliding, cancel it so player isn't stuck to walls after knockback
+        isWallSliding = false;
+        // Temporarily lock input to prevent immediate counter-movement
+        Debug.Log($"[PlayerMovement] ApplyKnockback: dir={direction} force={force} -> locking input for {knockbackLockDuration}s");
+        StartCoroutine(TemporaryInputLock(knockbackLockDuration));
+    }
+
+    private IEnumerator TemporaryInputLock(float duration)
+    {
+        // prevent further input and clear any residual horizontal input
+        inputLocked = true;
+        horizontalMove = 0f;
+        Debug.Log($"[PlayerMovement] Input locked for {duration} seconds");
+        yield return new WaitForSeconds(duration);
+        inputLocked = false;
+        Debug.Log("[PlayerMovement] Input unlocked");
+    }
+
+    // Public helper to lock input for a given duration (used by other scripts like PlayerCombat)
+    public void LockInput(float duration)
+    {
+        // Start the same temporary lock coroutine
+        // ensure horizontal input is cleared immediately
+        horizontalMove = 0f;
+        Debug.Log($"[PlayerMovement] LockInput called for {duration} seconds");
+        StartCoroutine(TemporaryInputLock(duration));
     }
 
     private void OnDrawGizmos()

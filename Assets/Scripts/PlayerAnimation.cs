@@ -16,6 +16,8 @@ public class PlayerAnimation : MonoBehaviour
     public Sprite wallRunSprite;
     public Sprite attackSprite;
     public float attackAnimationTime = 0.5f;
+    public Sprite hurtSprite;
+    public float hurtAnimationTime = 0.5f;
 
     [Header("References")]
     public Transform spriteTransform;
@@ -37,6 +39,7 @@ public class PlayerAnimation : MonoBehaviour
     private bool isGrounded;
     private bool isWallSliding;
     private bool isAttacking = false;
+    private bool isHurt = false;
 
     // --- NEW: Animation state variables ---
     private int currentRunFrameIndex = 0;
@@ -86,6 +89,13 @@ public class PlayerAnimation : MonoBehaviour
 
     private void UpdateSprite()
     {
+        if (isHurt)
+        {
+            if (hurtSprite != null)
+                spriteRenderer.sprite = hurtSprite;
+            return;
+        }
+
         if (isAttacking)
         {
             spriteRenderer.sprite = attackSprite;
@@ -134,6 +144,21 @@ public class PlayerAnimation : MonoBehaviour
         isAttacking = true;
         yield return new WaitForSeconds(attackAnimationTime);
         isAttacking = false;
+    }
+
+    // Public API: play the hurt animation for a short duration
+    public void PlayHurt()
+    {
+        // If already hurting, restart the coroutine to extend the effect
+        try { StopCoroutine("HurtCoroutine"); } catch { }
+        StartCoroutine(HurtCoroutine());
+    }
+
+    private IEnumerator HurtCoroutine()
+    {
+        isHurt = true;
+        yield return new WaitForSeconds(hurtAnimationTime);
+        isHurt = false;
     }
 
     // Draws gizmos for ground and wall checks

@@ -170,6 +170,7 @@ MonoBehaviour:
   pointA: {fileID: 709210735}
   pointB: {fileID: 219054791}
   patrolSpeed: 3
+  contactDamage: 1
   spriteTransform: {fileID: 106446465}
 --- !u!61 &106446467
 BoxCollider2D:
@@ -257,6 +258,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   maxHealth: 5
+  contactDamage: 1
   currentHealth: 0
   spriteRenderer: {fileID: 220366071}
   hitColor: {r: 1, g: 0, b: 0, a: 1}
@@ -7428,6 +7430,7 @@ MonoBehaviour:
   pointA: {fileID: 1650861136}
   pointB: {fileID: 1753923468}
   patrolSpeed: 3
+  contactDamage: 1
   spriteTransform: {fileID: 998813265}
 --- !u!61 &998813267
 BoxCollider2D:
@@ -7515,6 +7518,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBase
   maxHealth: 5
+  contactDamage: 1
   currentHealth: 0
   spriteRenderer: {fileID: 1020243791}
   hitColor: {r: 1, g: 0, b: 0, a: 1}
@@ -7801,8 +7805,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   moveSpeed: 5.67
   chargeSpeed: 10.7
-  stunDuration: 4
+  stunDuration: 2
   maxHealth: 50
+  contactDamage: 2
   chargeTiltAngle: 15
   trackingSmoothTime: 0.5
   detectionRadius: 20.16
@@ -7812,6 +7817,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 1533383393}
   chargeColor: {r: 0.9811321, g: 0.44737145, b: 0.44737145, a: 1}
   stunColor: {r: 0.9411765, g: 0.9019608, b: 0.5490196, a: 1}
+  playerCollisionIgnoreDuration: 0.25
 --- !u!50 &1187327244
 Rigidbody2D:
   serializedVersion: 5
@@ -8167,6 +8173,9 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
+  knockbackForce: 20
+  knockbackLockDuration: 0.15
+  hurtInputLockDuration: 0.15
 --- !u!4 &1560497895
 Transform:
   m_ObjectHideFlags: 0
@@ -8303,6 +8312,8 @@ MonoBehaviour:
   wallRunSprite: {fileID: 3391642820511892768, guid: 46d5d1f5e96d926498180c61a745cfa7, type: 3}
   attackSprite: {fileID: 6276856419454211490, guid: 0f31d92b426708146a452c4373d369c7, type: 3}
   attackAnimationTime: 0.2
+  hurtSprite: {fileID: 6242081796883805069, guid: ef78726583893604980f884c2492ca0a, type: 3}
+  hurtAnimationTime: 0.2
   spriteTransform: {fileID: 247879919}
   groundCheck: {fileID: 1492376143}
   groundLayer:
@@ -8326,6 +8337,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 697e3fe3199907a41bfee67152f2b600, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  maxHealth: 20
+  invulDuration: 0.6
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -9268,6 +9281,7 @@ MonoBehaviour:
   pointA: {fileID: 277412345}
   pointB: {fileID: 270751910}
   patrolSpeed: 3
+  contactDamage: 1
   spriteTransform: {fileID: 1876474534}
 --- !u!61 &1876474536
 BoxCollider2D:
@@ -9355,6 +9369,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBase
   maxHealth: 5
+  contactDamage: 1
   currentHealth: 0
   spriteRenderer: {fileID: 1385374109}
   hitColor: {r: 1, g: 0, b: 0, a: 1}

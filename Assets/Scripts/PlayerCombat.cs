@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class PlayerCombat : MonoBehaviour
 {
@@ -8,6 +9,12 @@ public class PlayerCombat : MonoBehaviour
     private int currentHealth;
 
     private PlayerMovement playerMovement;
+    private SpriteRenderer spriteRenderer;
+    private Color originalColor;
+    private bool isInvulnerable = false;
+    private PlayerAnimation playerAnimation;
+    [Header("Invulnerability")]
+    public float invulDuration = 0.6f;
 
     [Header("Combat Settings")]
     public LayerMask enemyLayer;
@@ -21,6 +28,16 @@ public class PlayerCombat : MonoBehaviour
     public Transform kickPoint;
     public float kickRange = 0.7f;
     public int kickDamage = 3; // Heavy damage
+
+    private void Start()
+    {
+        currentHealth = maxHealth;
+        playerMovement = GetComponent<PlayerMovement>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null) originalColor = spriteRenderer.color;
+        playerAnimation = GetComponent<PlayerAnimation>();
+        if (playerAnimation == null) playerAnimation = GetComponentInChildren<PlayerAnimation>();
+    }
 
     // --- INPUT LISTENERS ---
     
@@ -67,21 +84,60 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
-    private void Start()
+    // Returns true if damage was actually applied (not invulnerable)
+    public bool TakeDamage(int amount, string source = "Contact")
     {
-        currentHealth = maxHealth;
-        playerMovement = GetComponent<PlayerMovement>();
-    }
+        if (isInvulnerable || currentHealth <= 0) return false;
 
-    public void TakeDamage(int amount, string source = "Contact")
-    {
         currentHealth -= amount;
         Debug.Log($"<color=red>PLAYER HURT:</color> Took {amount} damage from {source}. HP: {currentHealth}/{maxHealth}");
+
+        // Trigger hurt animation if available
+        playerAnimation?.PlayHurt();
+        // Lock player input for hurt duration if movement component exists
+        if (playerMovement != null)
+        {
+            playerMovement.LockInput(playerMovement.hurtInputLockDuration);
+        }
 
         if (currentHealth <= 0)
         {
             Die();
         }
+        else
+        {
+            StartCoroutine(HurtInvulnerability());
+        }
+
+        return true;
+    }
+
+    private IEnumerator HurtInvulnerability()
+    {
+        if (spriteRenderer == null)
+        {
+            isInvulnerable = true;
+            yield return new WaitForSeconds(invulDuration);
+            isInvulnerable = false;
+            yield break;
+        }
+
+        isInvulnerable = true;
+
+        float elapsed = 0f;
+        float flashInterval = 0.1f;
+        bool toggle = false;
+
+        while (elapsed < invulDuration)
+        {
+            spriteRenderer.color = toggle ? Color.red : originalColor;
+            toggle = !toggle;
+            yield return new WaitForSeconds(flashInterval);
+            elapsed += flashInterval;
+        }
+
+        spriteRenderer.color = originalColor;
+        isInvulnerable = false;
     }
 
     private void Die()
@@ -100,7 +156,15 @@ public class PlayerCombat : MonoBehaviour
         EnemyBase enemy = collision.gameObject.GetComponent<EnemyBase>();
         if (enemy != null)
         {
-            TakeDamage(enemy.contactDamage, "EnemyContact");
+            bool damaged = TakeDamage(enemy.contactDamage, "EnemyContact");
+
+            // Apply knockback away from the enemy only if damage was applied
+            if (damaged && playerMovement != null)
+            {
+                Vector2 dir = (transform.position - collision.transform.position).normalized;
+                playerMovement.ApplyKnockback(dir, playerMovement.knockbackForce);
+            }
+
             return;
         }
 
@@ -108,7 +172,15 @@ public class PlayerCombat : MonoBehaviour
         BossCar boss = collision.gameObject.GetComponent<BossCar>();
         if (boss != null)
         {
-            TakeDamage(boss.contactDamage, "BossContact");
+            bool damaged = TakeDamage(boss.contactDamage, "BossContact");
+
+            // Apply knockback away from the boss only if damage was applied
+            if (damaged && playerMovement != null)
+            {
+                Vector2 dir = (transform.position - collision.transform.position).normalized;
+                playerMovement.ApplyKnockback(dir, playerMovement.knockbackForce);
+            }
+
             return;
         }
     }

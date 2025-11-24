@@ -22,8 +22,10 @@ public class BossCar : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     public Color chargeColor = Color.red;
     public Color stunColor = Color.yellow;
+    public float playerCollisionIgnoreDuration = 0.25f;
 
     private Rigidbody2D rb;
+    private Collider2D bossCollider;
     private bool isStunned = false;
     private bool isCharging = false;
     
@@ -33,6 +35,7 @@ public class BossCar : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        bossCollider = GetComponent<Collider2D>();
         currentBehavior = StartCoroutine(BossLoop());
     }
 
@@ -154,6 +157,46 @@ public class BossCar : MonoBehaviour
     {
         Debug.Log("Boss Destroyed!");
         Destroy(gameObject);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Only care about colliding with the player
+        if (!collision.gameObject.CompareTag("Player")) return;
+
+        // If player is stomping, let the stomp logic handle damage (player should be immune)
+        PlayerMovement pm = collision.gameObject.GetComponent<PlayerMovement>();
+        if (pm != null && pm.IsStomping) return;
+
+        // Apply contact damage via the player's API
+        PlayerCombat pc = collision.gameObject.GetComponent<PlayerCombat>();
+        if (pc != null)
+        {
+            bool damaged = pc.TakeDamage(contactDamage, "BossContact");
+
+            // Apply knockback only if damage was applied
+            if (damaged && pm != null)
+            {
+                Vector2 dir = (pm.transform.position - transform.position).normalized;
+                pm.ApplyKnockback(dir, pm.knockbackForce);
+            }
+
+            // Temporarily ignore collisions with the player to avoid the boss being tossed
+            if (bossCollider != null && collision.collider != null)
+            {
+                Physics2D.IgnoreCollision(bossCollider, collision.collider, true);
+                StartCoroutine(ReenableCollision(collision.collider, playerCollisionIgnoreDuration));
+            }
+        }
+    }
+
+    private IEnumerator ReenableCollision(Collider2D other, float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        if (bossCollider != null && other != null)
+        {
+            Physics2D.IgnoreCollision(bossCollider, other, false);
+        }
     }
 
     private void OnDrawGizmos()

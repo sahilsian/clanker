@@ -131,7 +131,6 @@ GameObject:
   - component: {fileID: 106446468}
   - component: {fileID: 106446467}
   - component: {fileID: 106446466}
-  - component: {fileID: 106446469}
   m_Layer: 7
   m_Name: R1
   m_TagString: Untagged
@@ -244,22 +243,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &106446469
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 106446464}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ebd1e0124094fd44b59486d3186ce48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  maxHealth: 5
-  currentHealth: 0
-  spriteRenderer: {fileID: 220366071}
-  hitColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &219054790
 GameObject:
   m_ObjectHideFlags: 0
@@ -7079,37 +7062,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &522789508
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 522789509}
-  m_Layer: 0
-  m_Name: Kick point
-  m_TagString: Untagged
-  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &522789509
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 522789508}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.14, y: -1.18, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1560497895}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &709210734
 GameObject:
   m_ObjectHideFlags: 0
@@ -7273,7 +7225,7 @@ Transform:
   m_GameObject: {fileID: 726672490}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 145.98247, y: 4.728, z: -10.08}
+  m_LocalPosition: {x: 145.93979, y: 4.728, z: -10.08}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7389,7 +7341,6 @@ GameObject:
   - component: {fileID: 998813268}
   - component: {fileID: 998813267}
   - component: {fileID: 998813266}
-  - component: {fileID: 998813269}
   m_Layer: 7
   m_Name: R2
   m_TagString: Untagged
@@ -7502,22 +7453,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &998813269
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 998813264}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ebd1e0124094fd44b59486d3186ce48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyBase
-  maxHealth: 5
-  currentHealth: 0
-  spriteRenderer: {fileID: 1020243791}
-  hitColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &1020243789
 GameObject:
   m_ObjectHideFlags: 0
@@ -7775,7 +7710,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.29, y: -0}
+  m_Offset: {x: 3.95, y: 0.12}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -7785,7 +7720,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 6.37, y: 1.6}
+  m_Size: {x: 6.12, y: 1.6}
   m_EdgeRadius: 0.16
 --- !u!114 &1187327243
 MonoBehaviour:
@@ -7801,17 +7736,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   moveSpeed: 5.67
   chargeSpeed: 10.7
-  stunDuration: 4
-  maxHealth: 50
+  stunDuration: 2
+  maxHealth: 3
   chargeTiltAngle: 15
   trackingSmoothTime: 0.5
   detectionRadius: 20.16
   chargeRange: 9.25
   flipThreshold: 1
   player: {fileID: 1560497895}
+  rearWeakPoint: {fileID: 1175627852}
+  topWeakPoint: {fileID: 2084337886}
   spriteRenderer: {fileID: 1533383393}
-  chargeColor: {r: 0.9811321, g: 0.44737145, b: 0.44737145, a: 1}
-  stunColor: {r: 0.9411765, g: 0.9019608, b: 0.5490196, a: 1}
+  chargeColor: {r: 1, g: 0, b: 0, a: 1}
+  stunColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!50 &1187327244
 Rigidbody2D:
   serializedVersion: 5
@@ -8129,7 +8066,6 @@ GameObject:
   - component: {fileID: 1560497898}
   - component: {fileID: 1560497899}
   - component: {fileID: 1560497900}
-  - component: {fileID: 1560497901}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -8152,21 +8088,24 @@ MonoBehaviour:
   moveSpeed: 9.18
   jumpForce: 30.1
   stompBounceForce: 8
-  wallSlideSpeed: 2.45
-  wallJumpForce: {x: -15, y: 18}
   groundCheck: {fileID: 1492376143}
-  groundCheckRadius: 0.2
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  wallCheck: {fileID: 1068278045}
-  wallCheckRadius: 0.3
-  wallLayer:
-    serializedVersion: 2
-    m_Bits: 256
+  groundCheckRadius: 0.2
+  spriteTransform: {fileID: 247879919}
+  kickHitbox: {fileID: 0}
+  kickRadius: 0.5
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
+  wallCheck: {fileID: 1068278045}
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  wallCheckRadius: 0.3
+  wallSlideSpeed: 2.45
+  wallJumpForce: {x: -15, y: 18}
 --- !u!4 &1560497895
 Transform:
   m_ObjectHideFlags: 0
@@ -8184,8 +8123,6 @@ Transform:
   - {fileID: 1492376143}
   - {fileID: 1399304932}
   - {fileID: 1068278045}
-  - {fileID: 1896990021}
-  - {fileID: 522789509}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &1560497897
@@ -8314,27 +8251,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   wallCheckRadius: 0.2
---- !u!114 &1560497901
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1560497892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 697e3fe3199907a41bfee67152f2b600, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  punchPoint: {fileID: 1896990021}
-  punchRange: 1
-  punchDamage: 1
-  kickPoint: {fileID: 522789509}
-  kickRange: 0.85
-  kickDamage: 2
 --- !u!1 &1650861135
 GameObject:
   m_ObjectHideFlags: 0
@@ -8467,7 +8383,7 @@ Transform:
   m_GameObject: {fileID: 1684081742}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 145.98247, y: 4.728, z: -10.08}
+  m_LocalPosition: {x: 145.93979, y: 4.728, z: -10.08}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9229,7 +9145,6 @@ GameObject:
   - component: {fileID: 1876474537}
   - component: {fileID: 1876474536}
   - component: {fileID: 1876474535}
-  - component: {fileID: 1876474538}
   m_Layer: 7
   m_Name: R3
   m_TagString: Untagged
@@ -9342,53 +9257,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &1876474538
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1876474533}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ebd1e0124094fd44b59486d3186ce48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyBase
-  maxHealth: 5
-  currentHealth: 0
-  spriteRenderer: {fileID: 1385374109}
-  hitColor: {r: 1, g: 0, b: 0, a: 1}
---- !u!1 &1896990020
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1896990021}
-  m_Layer: 0
-  m_Name: Punch point
-  m_TagString: Untagged
-  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1896990021
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1896990020}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.14, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1560497895}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1974753229
 GameObject:
   m_ObjectHideFlags: 0

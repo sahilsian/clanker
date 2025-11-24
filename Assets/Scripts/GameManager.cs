@@ -19,6 +19,9 @@ public class GameManager : MonoBehaviour
     public GameObject pauseScreen;
     public GameObject gameOverScreen;
 
+    [Header("UI Elements")]
+    public GameObject healthBar;   // NEW — separate health bar toggle
+
     [Header("State")]
     public GameState currentState = GameState.Start;
 
@@ -65,6 +68,10 @@ public class GameManager : MonoBehaviour
         if (hudGroup != null)
             hudGroup.SetActive(newState == GameState.Playing);
 
+        // NEW — Enable Health Bar ONLY while playing
+        if (healthBar != null)
+            healthBar.SetActive(newState == GameState.Playing);
+
         switch (newState)
         {
             case GameState.Start:
@@ -91,7 +98,7 @@ public class GameManager : MonoBehaviour
         isDialogueActive = false;
     }
 
-    // -------- Button callbacks --------
+    // -------- Button Callbacks --------
 
     public void OnStartButton()
     {

@@ -34,16 +34,19 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        // Establish singleton reference for other scripts
         Instance = this;
     }
 
     private void Start()
     {
+        // Begin at the start screen
         SetState(GameState.Start);
     }
 
     private void Update()
     {
+        // Handle pause toggles and death checks unless dialogue is active
         if (isDialogueActive) return;
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -59,6 +62,7 @@ public class GameManager : MonoBehaviour
 
     public void SetState(GameState newState)
     {
+        // Swap UI and timescale based on the requested game state
         currentState = newState;
 
         if (startScreen != null)
@@ -97,11 +101,13 @@ public class GameManager : MonoBehaviour
 
     public void BeginDialogue()
     {
+        // Pause gameplay input reactions while dialogue is shown
         isDialogueActive = true;
     }
 
     public void EndDialogue()
     {
+        // Resume gameplay input reactions after dialogue closes
         isDialogueActive = false;
     }
 
@@ -109,22 +115,26 @@ public class GameManager : MonoBehaviour
 
     public void OnStartButton()
     {
+        // Start button from start menu
         SetState(GameState.Playing);
     }
 
     public void OnResumeButton()
     {
+        // Resume button from pause menu
         SetState(GameState.Playing);
     }
 
     public void OnRestartButton()
     {
+        // Reload current scene and unpause time
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void ShowGameOver()
     {
+        // External trigger to enter the game over state
         SetState(GameState.GameOver);
     }
 
@@ -134,6 +144,7 @@ public class GameManager : MonoBehaviour
 
     private void CheckFallDeath()
     {
+        // Detect if the player has fallen below the threshold and end the game
         if (hasFallen) return;
         if (currentState != GameState.Playing) return;
 

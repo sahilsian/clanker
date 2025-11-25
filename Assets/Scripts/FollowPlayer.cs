@@ -7,6 +7,7 @@ public class FollowPlayer : MonoBehaviour
 
     void LateUpdate()
     {
+        // Keep this object aligned with the player (with optional offset)
         if (player != null)
         {
             // Keep the background at the player's position plus offset

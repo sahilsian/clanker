@@ -16,6 +16,7 @@ public class UIBootstrapper : MonoBehaviour
 
     void Awake()
     {
+        // Build all UI elements and the GameManager at runtime
         CreateCanvas();
         CreatePanels();
         CreateHealthBar();
@@ -24,6 +25,7 @@ public class UIBootstrapper : MonoBehaviour
 
     void CreateCanvas()
     {
+        // Spawn a basic overlay canvas for all UI
         canvasGO = new GameObject("MainCanvas");
         var canvas = canvasGO.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
@@ -33,6 +35,7 @@ public class UIBootstrapper : MonoBehaviour
 
     void CreatePanels()
     {
+        // Create UI panels for HUD, start, pause, and game over states
         // HUD
         hudPanel = CreatePanel("HUD_Panel", new Color(0, 0, 0, 0f));
 
@@ -50,6 +53,7 @@ public class UIBootstrapper : MonoBehaviour
 
     GameObject CreatePanel(string name, Color bgColor)
     {
+        // Helper to generate a full-screen panel with a background color
         GameObject panelGO = new GameObject(name, typeof(RectTransform), typeof(Image));
         panelGO.transform.SetParent(canvasGO.transform, false);
 
@@ -67,6 +71,7 @@ public class UIBootstrapper : MonoBehaviour
 
     void CreateHealthBar()
     {
+        // Build a simple health bar UI and attach the HealthBar script
         // Background
         GameObject bgGO = new GameObject("HealthBar_BG", typeof(RectTransform), typeof(Image));
         bgGO.transform.SetParent(hudPanel.transform, false);
@@ -107,6 +112,7 @@ public class UIBootstrapper : MonoBehaviour
 
     void CreateGameManager()
     {
+        // Instantiate GameManager and hook up the runtime-generated UI references
         GameObject gmGO = new GameObject("GameManagerObject");
         gameManager = gmGO.AddComponent<GameManager>();
 

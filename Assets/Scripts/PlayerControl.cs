@@ -48,12 +48,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        // Cache rigidbody and lock rotation so physics doesn't tip the player over
         rb = GetComponent<Rigidbody2D>();
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
     private void FixedUpdate()
     {
+        // Run physics checks, handle wall sliding/stomp logic, then apply movement/flip
         // 1. Checks
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
         isTouchingWall = Physics2D.OverlapCircle(wallCheck.position, wallCheckRadius, wallLayer);
@@ -73,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleWallSliding()
     {
+        // Clamp downward velocity when sliding along a wall
         if (isTouchingWall && !isGrounded && horizontalMove != 0)
         {
             isWallSliding = true;
@@ -86,6 +89,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void CheckForStomp()
     {
+        // Detect stomps while falling and apply bounce/damage
         if (rb.linearVelocity.y < -0.1f)
         {
             Collider2D enemyStomped = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, enemyLayer);
@@ -115,6 +119,7 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator StompWindow(float duration = 0.2f)
     {
+        // Briefly mark the player as stomping to prevent immediate counter-damage
         IsStomping = true;
         yield return new WaitForSeconds(duration);
         IsStomping = false;
@@ -122,6 +127,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Bounce()
     {
+        // Launch the player upward after a stomp
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, stompBounceForce);
     }
 
@@ -129,6 +135,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnMove(InputValue value)
     {
+        // Capture horizontal input unless locked by knockback/hurt
         if (inputLocked) return;
         Vector2 moveInput = value.Get<Vector2>();
         horizontalMove = moveInput.x;
@@ -136,6 +143,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnJump(InputValue value)
     {
+        // Handle ground jumps or wall jumps depending on state
         if (value.isPressed)
         {
             if (inputLocked) return;
@@ -155,6 +163,7 @@ public class PlayerMovement : MonoBehaviour
     // --- UPDATED: Flip Logic ---
     private void FlipObject()
     {
+        // Flip the player to face movement direction unless wall sliding
         if (isWallSliding) return; 
 
         // If moving LEFT and currently facing RIGHT
@@ -206,6 +215,7 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator TemporaryInputLock(float duration)
     {
+        // Temporarily block movement input (used during knockback or hurt)
         // prevent further input and clear any residual horizontal input
         inputLocked = true;
         horizontalMove = 0f;
@@ -218,6 +228,7 @@ public class PlayerMovement : MonoBehaviour
     // Public helper to lock input for a given duration (used by other scripts like PlayerCombat)
     public void LockInput(float duration)
     {
+        // Start the lock coroutine and immediately clear stored horizontal input
         // Start the same temporary lock coroutine
         // ensure horizontal input is cleared immediately
         horizontalMove = 0f;
@@ -227,6 +238,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        // Visualize ground and wall detection radii in the editor
         if (groundCheck != null)
         {
             Gizmos.color = Color.green;

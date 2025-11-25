@@ -13,17 +13,19 @@ public class PlayerAttack : MonoBehaviour
 
     void OnAttack(InputValue value)
     {
+        // Trigger an attack if the cooldown allows
         if (!canAttack) return;
         StartCoroutine(AttackRoutine());
     }
 
     IEnumerator AttackRoutine()
     {
+        // Play the attack animation, enable hitbox briefly, then enforce cooldown
         canAttack = false;
 
         if (animator != null)
             animator.SetTrigger("Attack");
-        Debug.Log("Hitbox ¿ªÆô");
+        Debug.Log("Hitbox active");
         attackHitbox.SetActive(true);
         yield return new WaitForSeconds(attackDuration);
 

@@ -51,6 +51,7 @@ public class PlayerAnimation : MonoBehaviour
 
     void Start()
     {
+        // Cache components and set the initial idle sprite
         rb = GetComponent<Rigidbody2D>();
 
         if (spriteTransform != null)
@@ -68,6 +69,7 @@ public class PlayerAnimation : MonoBehaviour
 
     void FixedUpdate()
     {
+        // Mirror the physics checks from PlayerMovement for animation decisions
         // --- Duplicate Physics Logic ---
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
@@ -88,11 +90,13 @@ public class PlayerAnimation : MonoBehaviour
 
     void Update()
     {
+        // Drive sprite changes every frame
         UpdateSprite();
     }
 
     private void UpdateSprite()
     {
+        // Choose the correct sprite based on movement, attack, and hurt states
         if (spriteRenderer == null) return;
 
         if (isHurt)
@@ -142,6 +146,7 @@ public class PlayerAnimation : MonoBehaviour
     // Public API: play an attack animation by type: "Punch", "Kick", or "Default"
     public void PlayAttack(string attackType)
     {
+        // Select attack sprite and duration, then trigger the coroutine
         Sprite spriteToUse = null;
         float duration = 0f;
 
@@ -168,6 +173,7 @@ public class PlayerAnimation : MonoBehaviour
 
     private IEnumerator AttackCoroutine(float duration, Sprite spriteToUse)
     {
+        // Display the attack sprite for a set duration
         isAttacking = true;
         currentAttackSprite = spriteToUse;
         if (spriteRenderer != null && currentAttackSprite != null)
@@ -182,6 +188,7 @@ public class PlayerAnimation : MonoBehaviour
     // Public API: play the hurt animation for a short duration
     public void PlayHurt()
     {
+        // Restart hurt coroutine to ensure the effect persists for full duration
         // If already hurting, restart the coroutine to extend the effect
         try { StopCoroutine("HurtCoroutine"); } catch { }
         StartCoroutine(HurtCoroutine());
@@ -189,6 +196,7 @@ public class PlayerAnimation : MonoBehaviour
 
     private IEnumerator HurtCoroutine()
     {
+        // Temporarily mark the player as hurt for animation purposes
         isHurt = true;
         yield return new WaitForSeconds(hurtAnimationTime);
         isHurt = false;

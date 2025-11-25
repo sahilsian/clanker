@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
+        // Initialize health and cache visuals for feedback
         currentHealth = maxHealth;
 
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -26,6 +27,7 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        // Reduce health, play feedback, and destroy the enemy if depleted
         currentHealth -= damage;
         Debug.Log("Enemy HP: " + currentHealth);
 
@@ -40,6 +42,7 @@ public class Enemy : MonoBehaviour
 
     IEnumerator FlashRed()
     {
+        // Flash the sprite red briefly to show a hit
         spriteRenderer.color = Color.red;
         yield return new WaitForSeconds(flashDuration);
         spriteRenderer.color = originalColor;
@@ -47,6 +50,7 @@ public class Enemy : MonoBehaviour
 
     IEnumerator Shake()
     {
+        // Jitter the enemy position slightly to emphasize the hit
         float elapsed = 0f;
 
         while (elapsed < shakeDuration)
@@ -65,6 +69,7 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
+        // Remove the enemy object from the scene
         Destroy(gameObject);
     }
 }

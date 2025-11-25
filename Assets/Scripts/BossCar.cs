@@ -34,6 +34,7 @@ public class BossCar : MonoBehaviour
 
     private void Start()
     {
+        // Cache components and begin the boss behaviour loop
         rb = GetComponent<Rigidbody2D>();
         bossCollider = GetComponent<Collider2D>();
         currentBehavior = StartCoroutine(BossLoop());
@@ -42,6 +43,7 @@ public class BossCar : MonoBehaviour
     // ... [Movement/Charge Logic remains the same as previous] ...
     private IEnumerator BossLoop()
     {
+        // Alternate between tracking the player and executing charge attacks
         while (maxHealth > 0)
         {
             // APPROACH
@@ -93,11 +95,13 @@ public class BossCar : MonoBehaviour
     // Overload to keep PlayerMovement.cs working (for Stomps)
     public void TakeDamage(string type)
     {
+        // Default stomp damage forwards to the main overload
         TakeDamage(1, type); // Default to 1 damage if amount isn't specified
     }
 
     public void TakeDamage(int damageAmount, string type)
     {
+        // Handle damage differently depending on whether the boss is charging or stunned
         // 1. STOMP LOGIC (Trigger Stun)
         if (type == "Stomp")
         {
@@ -137,6 +141,7 @@ public class BossCar : MonoBehaviour
 
     private IEnumerator FlashHitFeedback()
     {
+        // Flash white briefly to acknowledge a successful hit while stunned
         spriteRenderer.color = Color.white;
         yield return new WaitForSeconds(0.1f);
         if(isStunned) spriteRenderer.color = stunColor;
@@ -144,6 +149,7 @@ public class BossCar : MonoBehaviour
 
     private IEnumerator StunRoutine()
     {
+        // Pause charging, change color, and resume behaviour after the stun duration
         isStunned = true;
         spriteRenderer.color = stunColor; 
         transform.rotation = Quaternion.identity; 
@@ -155,6 +161,7 @@ public class BossCar : MonoBehaviour
 
     private void Die()
     {
+        // Destroy the boss object when health reaches zero
         Debug.Log("Boss Destroyed!");
         Destroy(gameObject);
     }
@@ -199,6 +206,7 @@ public class BossCar : MonoBehaviour
 
     private IEnumerator ReenableCollision(Collider2D other, float duration)
     {
+        // Re-enable player collision after a short grace period
         yield return new WaitForSeconds(duration);
         if (bossCollider != null && other != null)
         {
@@ -208,6 +216,7 @@ public class BossCar : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        // Visualize detection and charge ranges in the editor
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
         Gizmos.color = Color.red;

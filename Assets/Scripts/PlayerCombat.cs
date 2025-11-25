@@ -34,6 +34,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void Start()
     {
+        // Initialize health, cache components, and wire up the health UI
         currentHealth = maxHealth;
         playerMovement = GetComponent<PlayerMovement>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -54,6 +55,7 @@ public class PlayerCombat : MonoBehaviour
     
     public void OnPunch(InputValue value)
     {
+        // Light attack input handler
         if (value.isPressed)
         {
             // Play punch animation
@@ -64,6 +66,7 @@ public class PlayerCombat : MonoBehaviour
 
     public void OnKick(InputValue value)
     {
+        // Heavy attack input handler
         if (value.isPressed)
         {
             // Play kick animation
@@ -75,6 +78,7 @@ public class PlayerCombat : MonoBehaviour
     // --- CORE ATTACK LOGIC ---
     private void PerformAttack(Transform attackPoint, float range, int damage, string attackType)
     {
+        // Detect enemies in range and deliver damage by type
         // Visual log for the player action
         Debug.Log($"<color=cyan>PLAYER ACTION:</color> Performed {attackType} (Damage: {damage})");
 
@@ -102,6 +106,7 @@ public class PlayerCombat : MonoBehaviour
     // Returns true if damage was actually applied (not invulnerable)
     public bool TakeDamage(int amount, string source = "Contact")
     {
+        // Apply incoming damage, play hurt feedback, and handle death
         if (isInvulnerable || currentHealth <= 0) return false;
 
         currentHealth -= amount;
@@ -135,6 +140,7 @@ public class PlayerCombat : MonoBehaviour
 
     private IEnumerator HurtInvulnerability()
     {
+        // Flash the sprite and block further damage for a short duration
         if (spriteRenderer == null)
         {
             // sprite absent: just wait and then clear invulnerability
@@ -161,6 +167,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void Die()
     {
+        // Disable the player and trigger the game over sequence
         Debug.Log("<color=magenta>PLAYER DIED</color>");
         // Disable the Player and show Game Over UI
         gameObject.SetActive(false);
@@ -170,6 +177,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // Apply contact damage and knockback when colliding with enemies or boss
         // If player is stomping (hit enemy from above), don't take contact damage
         if (playerMovement != null && playerMovement.IsStomping) return;
 
@@ -208,6 +216,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        // Draw hitbox ranges when selected in the editor
         if (punchPoint != null)
         {
             Gizmos.color = Color.cyan;

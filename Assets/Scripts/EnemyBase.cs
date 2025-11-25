@@ -15,6 +15,7 @@ public class EnemyBase : MonoBehaviour
 
     private void Start()
     {
+        // Initialize health and cache renderer/color for flash feedback
         currentHealth = maxHealth;
         
         // Auto-fetch SpriteRenderer if not manually assigned
@@ -27,6 +28,7 @@ public class EnemyBase : MonoBehaviour
     // This is the function PlayerCombat and PlayerMovement call
     public void TakeDamage(int damageAmount, string attackType)
     {
+        // Apply damage, trigger feedback, and destroy the enemy when health is gone
         currentHealth -= damageAmount;
 
         Debug.Log($"<color=orange>ENEMY HIT:</color> Registered <b>{attackType}</b>. Damage: {damageAmount}. Health remaining: {currentHealth}");
@@ -43,6 +45,7 @@ public class EnemyBase : MonoBehaviour
 
     private void Die(string lastHitType)
     {
+        // Handle enemy death and log which attack finished it
         Debug.Log($"<color=red>ENEMY DEFEATED</color> by {lastHitType}!");
         
         // TODO: Instantiate an explosion particle effect here if you have one
@@ -52,6 +55,7 @@ public class EnemyBase : MonoBehaviour
 
     private IEnumerator FlashRed()
     {
+        // Flash red briefly to show that damage was taken
         if (spriteRenderer != null)
         {
             spriteRenderer.color = hitColor; // Flash Red

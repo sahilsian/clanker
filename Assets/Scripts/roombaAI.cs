@@ -19,6 +19,7 @@ public class RoombaAI : MonoBehaviour
 
     void Start()
     {
+        // Cache components and pick an initial patrol target
         rb = GetComponent<Rigidbody2D>();
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         
@@ -31,6 +32,7 @@ public class RoombaAI : MonoBehaviour
 
     void FixedUpdate()
     {
+        // Patrol between two points, flipping visuals as needed
         if (currentTarget == null) return; 
 
         // 1. Move
@@ -50,6 +52,7 @@ public class RoombaAI : MonoBehaviour
 
     private void Flip()
     {
+        // Mirror the sprite horizontally when turning around
         isFacingRight = !isFacingRight;
         Vector3 scale = spriteTransform.localScale;
         scale.x *= -1;
@@ -59,6 +62,7 @@ public class RoombaAI : MonoBehaviour
     // Handles damaging the player if they touch the Roomba
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // Apply contact damage and knockback when colliding with the player
         if (collision.gameObject.CompareTag("Player"))
         {
             Debug.Log("Roomba hit the player! Ouch!");

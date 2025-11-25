@@ -6,6 +6,10 @@ TagManager:
   tags:
   - ground
   - Enemy
+<<<<<<< HEAD
+=======
+  - Wall
+>>>>>>> fighter/main
   layers:
   - Default
   - TransparentFX
@@ -14,8 +18,8 @@ TagManager:
   - Water
   - UI
   - ground
-  - 
-  - 
+  - enemy
+  - Wall
   - 
   - 
   - 
@@ -40,8 +44,14 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: World
+    uniqueID: 1502866255
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: player
+    uniqueID: 3493006575
     locked: 0
   m_RenderingLayers:
   - Default

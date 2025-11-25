@@ -1,7 +1,19 @@
 fileFormatVersion: 2
-guid: a0914a217586fa946a323a9febf1d0c1
+guid: c30a843f7256c7b46bc86c6e1b4e1141
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -7337107309117042134
+    second: player punch_0
+  - first:
+      213: 763359042379071531
+    second: player punch_1
+  - first:
+      213: 7354048442582832930
+    second: player punch_2
+  - first:
+      213: -7512518245972953789
+    second: player punch_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -43,12 +55,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 0
+  spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 260
+  spritePixelsToUnits: 500
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -94,11 +106,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-<<<<<<< HEAD
-    buildTarget: Android
-=======
     buildTarget: WebGL
->>>>>>> fighter/main
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -112,12 +120,100 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: player punch_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 950
+        width: 504
+        height: 243
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a221829a6cb5d2a90800000000000000
+      internalID: -7337107309117042134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: player punch_1
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 0
+        width: 1980
+        height: 1993
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b20461d210ff79a00800000000000000
+      internalID: 763359042379071531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: player punch_2
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 295
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2271a295814de0660800000000000000
+      internalID: 7354048442582832930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: player punch_3
+      rect:
+        serializedVersion: 2
+        x: 1743
+        y: 0
+        width: 23
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3453424557c2eb790800000000000000
+      internalID: -7512518245972953789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -126,7 +222,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      player punch_0: -7337107309117042134
+      player punch_1: 763359042379071531
+      player punch_2: 7354048442582832930
+      player punch_3: -7512518245972953789
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

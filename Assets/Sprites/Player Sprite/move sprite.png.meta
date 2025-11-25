@@ -1,7 +1,13 @@
 fileFormatVersion: 2
-guid: a0914a217586fa946a323a9febf1d0c1
+guid: 19774a288a279e642ac723e87bf50dd2
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 3105772234900179043
+    second: move sprite_0
+  - first:
+      213: -7392488299271154030
+    second: move sprite_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -43,9 +49,9 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 0
+  spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 260
@@ -94,11 +100,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-<<<<<<< HEAD
-    buildTarget: Android
-=======
     buildTarget: WebGL
->>>>>>> fighter/main
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -112,12 +114,56 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: move sprite_0
+      rect:
+        serializedVersion: 2
+        x: 158
+        y: 10
+        width: 737
+        height: 972
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3680f7e746be91b20800000000000000
+      internalID: 3105772234900179043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: move sprite_1
+      rect:
+        serializedVersion: 2
+        x: 1011
+        y: 47
+        width: 13
+        height: 205
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29616b31f0b986990800000000000000
+      internalID: -7392488299271154030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -126,7 +172,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      move sprite_0: 3105772234900179043
+      move sprite_1: -7392488299271154030
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

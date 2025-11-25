@@ -17,7 +17,7 @@ TagManager:
   - ground
   - enemy
   - Wall
-  - Background
+  - 
   - 
   - 
   - 
@@ -41,6 +41,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 650306253
+    locked: 0
   - name: World
     uniqueID: 1502866255
     locked: 0

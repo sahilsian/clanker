@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     public GameObject gameOverScreen;
 
     [Header("UI Elements")]
-    public GameObject healthBar;   // NEW — separate health bar toggle
+    public GameObject healthBar;
 
     [Header("Fail Conditions")]
     [Tooltip("If the player falls below this Y, trigger a restart.")]
@@ -30,7 +30,6 @@ public class GameManager : MonoBehaviour
     [Header("State")]
     public GameState currentState = GameState.Start;
 
-    // NEW — Dialogue freeze flag
     public bool isDialogueActive = false;
 
     private void Awake()
@@ -45,7 +44,6 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        // Disable pause during dialogue
         if (isDialogueActive) return;
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -75,11 +73,9 @@ public class GameManager : MonoBehaviour
         if (hudGroup != null)
             hudGroup.SetActive(newState == GameState.Playing);
 
-        // NEW — Enable Health Bar ONLY while playing
         if (healthBar != null)
             healthBar.SetActive(newState == GameState.Playing);
 
-        // Reset fall flag when (re)entering gameplay flow
         if (newState == GameState.Start || newState == GameState.Playing)
             hasFallen = false;
 

@@ -22,6 +22,11 @@ public class GameManager : MonoBehaviour
     [Header("UI Elements")]
     public GameObject healthBar;   // NEW — separate health bar toggle
 
+    [Header("Fail Conditions")]
+    [Tooltip("If the player falls below this Y, trigger a restart.")]
+    public float fallDeathY = -7f;
+    public Transform player;
+
     [Header("State")]
     public GameState currentState = GameState.Start;
 
@@ -50,6 +55,8 @@ public class GameManager : MonoBehaviour
             else if (currentState == GameState.Paused)
                 SetState(GameState.Playing);
         }
+
+        CheckFallDeath();
     }
 
     public void SetState(GameState newState)
@@ -71,6 +78,10 @@ public class GameManager : MonoBehaviour
         // NEW — Enable Health Bar ONLY while playing
         if (healthBar != null)
             healthBar.SetActive(newState == GameState.Playing);
+
+        // Reset fall flag when (re)entering gameplay flow
+        if (newState == GameState.Start || newState == GameState.Playing)
+            hasFallen = false;
 
         switch (newState)
         {
@@ -119,5 +130,30 @@ public class GameManager : MonoBehaviour
     public void ShowGameOver()
     {
         SetState(GameState.GameOver);
+    }
+
+    // -------- Fail Conditions --------
+
+    private bool hasFallen;
+
+    private void CheckFallDeath()
+    {
+        if (hasFallen) return;
+        if (currentState != GameState.Playing) return;
+
+        if (player == null)
+        {
+            var playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null) player = playerObj.transform;
+        }
+
+        if (player == null) return;
+
+        if (player.position.y < fallDeathY)
+        {
+            hasFallen = true;
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 }

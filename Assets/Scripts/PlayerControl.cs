@@ -91,8 +91,7 @@ public class PlayerMovement : MonoBehaviour
             Collider2D enemyStomped = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, enemyLayer);
             if (enemyStomped != null)
             {
-                // Hitboxes may be children of the enemy; search parents to be robust
-                BossCar boss = enemyStomped.GetComponentInParent<BossCar>();
+                BossCar boss = enemyStomped.GetComponent<BossCar>();
                 if (boss != null)
                 {
                     Debug.Log("Player Stomped the Boss!");
@@ -102,7 +101,7 @@ public class PlayerMovement : MonoBehaviour
                     return; 
                 }
 
-                EnemyBase enemy = enemyStomped.GetComponentInParent<EnemyBase>();
+                EnemyBase enemy = enemyStomped.GetComponent<EnemyBase>();
                 if (enemy != null)
                 {
                     Debug.Log("Player Stomped an Enemy!");

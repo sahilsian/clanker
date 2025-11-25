@@ -93,17 +93,17 @@ public class PlayerAnimation : MonoBehaviour
 
     private void UpdateSprite()
     {
+        if (spriteRenderer == null) return;
+
         if (isHurt)
         {
-            if (hurtSprite != null)
-                spriteRenderer.sprite = hurtSprite;
+            if (hurtSprite != null) spriteRenderer.sprite = hurtSprite;
             return;
         }
 
         if (isAttacking)
         {
-            if (currentAttackSprite != null)
-                spriteRenderer.sprite = currentAttackSprite;
+            if (currentAttackSprite != null) spriteRenderer.sprite = currentAttackSprite;
             return;
         }
 
@@ -115,7 +115,7 @@ public class PlayerAnimation : MonoBehaviour
         {
             spriteRenderer.sprite = jumpSprite;
         }
-        else if (Mathf.Abs(rb.linearVelocity.x) > 0.1f) // Player is running
+        else if (Mathf.Abs(rb.linearVelocity.x) > 0.1f && runFrames != null && runFrames.Length > 0) // Player is running
         {
             // --- NEW: Run animation logic ---
             runFrameTimer += Time.deltaTime;
@@ -128,7 +128,9 @@ public class PlayerAnimation : MonoBehaviour
         }
         else // Idle state
         {
-            spriteRenderer.sprite = idleSprite;
+            // Fall back to the first run frame if idle sprite is missing so the player stays visible
+            if (idleSprite != null) spriteRenderer.sprite = idleSprite;
+            else if (runFrames != null && runFrames.Length > 0) spriteRenderer.sprite = runFrames[0];
             // Reset run animation when idle
             currentRunFrameIndex = 0;
             runFrameTimer = 0f;

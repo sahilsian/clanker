@@ -4,6 +4,9 @@ using System.Collections;
 
 public class PlayerCombat : MonoBehaviour
 {
+    [Header("UI")]
+    public HealthBar healthBar;
+
     [Header("Player Stats")]
     public int maxHealth = 5;
     private int currentHealth;
@@ -37,6 +40,14 @@ public class PlayerCombat : MonoBehaviour
         if (spriteRenderer != null) originalColor = spriteRenderer.color;
         playerAnimation = GetComponent<PlayerAnimation>();
         if (playerAnimation == null) playerAnimation = GetComponentInChildren<PlayerAnimation>();
+
+        // Hook health UI if present
+        if (healthBar == null) healthBar = FindObjectOfType<HealthBar>();
+        if (healthBar != null)
+        {
+            healthBar.maxHealth = maxHealth;
+            healthBar.SetHealth(currentHealth);
+        }
     }
 
     // --- INPUT LISTENERS ---
@@ -99,6 +110,9 @@ public class PlayerCombat : MonoBehaviour
         // Immediately mark invulnerable to prevent other hits in the same frame
         isInvulnerable = true;
 
+        // Update UI
+        if (healthBar != null) healthBar.SetHealth(currentHealth);
+
         // Trigger hurt animation if available
         playerAnimation?.PlayHurt();
         // Lock player input for hurt duration if movement component exists
@@ -148,8 +162,10 @@ public class PlayerCombat : MonoBehaviour
     private void Die()
     {
         Debug.Log("<color=magenta>PLAYER DIED</color>");
-        // TODO: Trigger death animation / respawn. For now just disable the GameObject
+        // Disable the Player and show Game Over UI
         gameObject.SetActive(false);
+        if (healthBar != null) healthBar.SetHealth(0);
+        GameManager.Instance?.ShowGameOver();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

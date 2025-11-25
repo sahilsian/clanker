@@ -152,8 +152,9 @@ public class GameManager : MonoBehaviour
         if (player.position.y < fallDeathY)
         {
             hasFallen = true;
-            Time.timeScale = 1f;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            // Disable the player if present, then show the Game Over UI so the player can restart
+            player.gameObject.SetActive(false);
+            SetState(GameState.GameOver);
         }
     }
 }

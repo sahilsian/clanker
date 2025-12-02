@@ -12,6 +12,12 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce = 15f;
     public float stompBounceForce = 8f; 
 
+    [Header("Visuals")]
+    public float doubleJumpSpinDuration = 0.5f;
+
+    [Header("Jump Settings")]
+    public float doubleJumpForceMultiplier = 0.5f;
+
     [Header("Wall Run Settings")]
     public float wallSlideSpeed = 2f; 
     public Vector2 wallJumpForce = new Vector2(7f, 14f);
@@ -46,10 +52,18 @@ public class PlayerMovement : MonoBehaviour
     [Tooltip("How long player input is locked when the player is hurt (in seconds)")]
     public float hurtInputLockDuration = 0.25f;
 
+    // Track if wall run has been used in current air-time
+    private bool hasWallRunInAir = false;
+    // Double Jump Logic
+    private bool canDoubleJump = true;
+
+    private PlayerSkeletalAnimation playerAnim;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        playerAnim = GetComponentInChildren<PlayerSkeletalAnimation>();
     }
 
     private void FixedUpdate()
@@ -57,6 +71,14 @@ public class PlayerMovement : MonoBehaviour
         // 1. Checks
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
         isTouchingWall = Physics2D.OverlapCircle(wallCheck.position, wallCheckRadius, wallLayer);
+
+        if (isGrounded)
+        {
+            hasWallRunInAir = false;
+            canDoubleJump = true;
+            // Ensure rotation is reset when grounded
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
 
         // 2. Logic
         HandleWallSliding();
@@ -73,9 +95,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleWallSliding()
     {
-        if (isTouchingWall && !isGrounded && horizontalMove != 0)
+        if (isTouchingWall && !isGrounded && horizontalMove != 0 && !hasWallRunInAir)
         {
             isWallSliding = true;
+            canDoubleJump = true; // Reset double jump when grabbing wall
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, Mathf.Clamp(rb.linearVelocity.y, -wallSlideSpeed, float.MaxValue));
         }
         else
@@ -120,6 +143,35 @@ public class PlayerMovement : MonoBehaviour
         IsStomping = false;
     }
 
+    private IEnumerator DoDoubleJumpSpin()
+    {
+        float elapsed = 0f;
+        // Front flip direction: CW (-360) if facing right, CCW (360) if facing left
+        float rotationAmount = isFacingRight ? -360f : 360f;
+        
+        // Use a separate tracker for rotation to avoid Euler angle wrapping issues
+        float currentRotation = 0f;
+        float previousRotation = 0f;
+
+        while (elapsed < doubleJumpSpinDuration)
+        {
+            elapsed += Time.deltaTime;
+            float percent = Mathf.Clamp01(elapsed / doubleJumpSpinDuration);
+            
+            // Linear rotation for now
+            currentRotation = Mathf.Lerp(0f, rotationAmount, percent);
+            float delta = currentRotation - previousRotation;
+            
+            transform.Rotate(0, 0, delta);
+            previousRotation = currentRotation;
+            
+            yield return null;
+        }
+
+        // Ensure we end up exactly back at 0 rotation
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+    }
+
     private void Bounce()
     {
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, stompBounceForce);
@@ -146,8 +198,17 @@ public class PlayerMovement : MonoBehaviour
             else if (isWallSliding)
             {
                 isWallSliding = false;
+                hasWallRunInAir = true; // Consume the wall run ability
                 float jumpDirection = isFacingRight ? -1 : 1; 
                 rb.linearVelocity = new Vector2(jumpDirection * wallJumpForce.x, wallJumpForce.y);
+            }
+            else if (canDoubleJump)
+            {
+                canDoubleJump = false;
+                // Apply reduced force for double jump
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce * doubleJumpForceMultiplier);
+                if (playerAnim != null) playerAnim.TriggerJump();
+                StartCoroutine(DoDoubleJumpSpin());
             }
         }
     }

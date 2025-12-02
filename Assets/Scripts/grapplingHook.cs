@@ -12,6 +12,7 @@ public class GrapplingHook : MonoBehaviour
     [Header("References")]
     public DistanceJoint2D distanceJoint;
     public LineRenderer ropeRenderer;
+    public PlayerSkeletalAnimation playerAnimation;
     [Header("Debug")]
     public bool enableDebugLogs = true;
     public string debugTag = "[Grapple]";
@@ -27,6 +28,8 @@ public class GrapplingHook : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         distanceJoint.enabled = false;
         if (ropeRenderer != null) ropeRenderer.enabled = false;
+        if (playerAnimation == null) playerAnimation = GetComponent<PlayerSkeletalAnimation>();
+        if (playerAnimation == null) playerAnimation = GetComponentInChildren<PlayerSkeletalAnimation>();
         if (enableDebugLogs) Debug.Log($"{debugTag} GrapplingHook started. detectRange={detectRange}, swingForce={swingForce}");
     }
 
@@ -117,6 +120,7 @@ public class GrapplingHook : MonoBehaviour
             isGrappling = true;
 
             if (ropeRenderer != null) ropeRenderer.enabled = true;
+            if (playerAnimation != null) playerAnimation.SetSwinging(true);
             if (enableDebugLogs) Debug.Log($"{debugTag} Grapple attached to {best.name} at {targetAnchor}, distance={distanceJoint.distance:F2}");
         }
         else
@@ -139,6 +143,7 @@ public class GrapplingHook : MonoBehaviour
         distanceJoint.enabled = false;
         isGrappling = false;
         if (ropeRenderer != null) ropeRenderer.enabled = false;
+        if (playerAnimation != null) playerAnimation.SetSwinging(false);
         if (enableDebugLogs) Debug.Log($"{debugTag} Grapple detached and visuals disabled");
     }
 
@@ -181,6 +186,7 @@ public class GrapplingHook : MonoBehaviour
     {
         if (distanceJoint != null) distanceJoint.enabled = false;
         if (ropeRenderer != null) ropeRenderer.enabled = false;
+        if (playerAnimation != null) playerAnimation.SetSwinging(false);
         isGrappling = false;
     }
 

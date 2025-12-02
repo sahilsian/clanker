@@ -12,7 +12,7 @@ public class PlayerCombat : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
     private bool isInvulnerable = false;
-    private PlayerAnimation playerAnimation;
+    private PlayerSkeletalAnimation playerAnimation;
     [Header("Invulnerability")]
     public float invulDuration = 0.6f;
 
@@ -35,8 +35,8 @@ public class PlayerCombat : MonoBehaviour
         playerMovement = GetComponent<PlayerMovement>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer != null) originalColor = spriteRenderer.color;
-        playerAnimation = GetComponent<PlayerAnimation>();
-        if (playerAnimation == null) playerAnimation = GetComponentInChildren<PlayerAnimation>();
+        playerAnimation = GetComponent<PlayerSkeletalAnimation>();
+        if (playerAnimation == null) playerAnimation = GetComponentInChildren<PlayerSkeletalAnimation>();
     }
 
     // --- INPUT LISTENERS ---

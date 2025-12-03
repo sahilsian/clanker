@@ -69,7 +69,17 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.EnemyDefeated();
+        }
+        else {
+            Debug.LogError("GameManager.Instance is NULL!!!  doesn't have GameManager£¿");
+
+        }
         // Remove the enemy object from the scene
+        Debug.Log("EnemyDefeated() sent to GameManager");
+
         Destroy(gameObject);
     }
 }

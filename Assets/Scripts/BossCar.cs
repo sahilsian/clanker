@@ -163,6 +163,7 @@ public class BossCar : MonoBehaviour
     {
         // Destroy the boss object when health reaches zero
         Debug.Log("Boss Destroyed!");
+        GameManager.Instance.EnemyDefeated();
         Destroy(gameObject);
     }
 

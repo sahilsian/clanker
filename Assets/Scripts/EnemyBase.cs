@@ -47,9 +47,17 @@ public class EnemyBase : MonoBehaviour
     {
         // Handle enemy death and log which attack finished it
         Debug.Log($"<color=red>ENEMY DEFEATED</color> by {lastHitType}!");
-        
+        if (GameManager.Instance == null)
+        {
+            Debug.LogError("GameManager.Instance 是 NULL！请检查场景里是否有 GameManager 并正确挂脚本");
+        }
+        else
+        {
+            GameManager.Instance.EnemyDefeated();
+            Debug.Log("EnemyBase 已通知 GameManager 敌人死亡");
+        }
         // TODO: Instantiate an explosion particle effect here if you have one
-        
+
         Destroy(gameObject);
     }
 

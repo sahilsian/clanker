@@ -21,16 +21,24 @@ public class GameManager : MonoBehaviour
 
     [Header("UI Elements")]
     public GameObject healthBar;
-
+    [Header("Level Settings")]
+    public bool skipStartScreen = false;
+    public bool YouWin = false;
+    public bool boss = false;
     [Header("Fail Conditions")]
     [Tooltip("If the player falls below this Y, trigger a restart.")]
     public float fallDeathY = -7f;
     public Transform player;
-
+    [Header("Enemy + Portal System")]
+    public GameObject portalPrefab;       
+    public Transform portalSpawnPoint;    
     [Header("State")]
     public GameState currentState = GameState.Start;
 
     public bool isDialogueActive = false;
+    private int totalEnemies;
+    private int defeatedEnemies = 0;
+    private bool portalSpawned = false;
 
     private void Awake()
     {
@@ -40,8 +48,25 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        
         // Begin at the start screen
-        SetState(GameState.Start);
+        if (skipStartScreen)
+        {
+            SetState(GameState.Playing);
+        }
+        else
+        {
+            SetState(GameState.Start);
+        }
+        
+        EnemyBase[] enemies = Object.FindObjectsByType<EnemyBase>(FindObjectsSortMode.None);
+        totalEnemies = enemies.Length;
+        if (boss)
+        {
+            totalEnemies++;
+        }
+        Debug.Log("Total enemies found: " + totalEnemies);
+
     }
 
     private void Update()
@@ -163,5 +188,38 @@ public class GameManager : MonoBehaviour
             player.gameObject.SetActive(false);
             SetState(GameState.GameOver);
         }
+    }
+    // -------- Enemy System --------
+    public void EnemyDefeated()
+    {
+        defeatedEnemies++;
+        Debug.Log("GameManager received enemy death. Count: " + defeatedEnemies + "/" + totalEnemies);
+
+        if (defeatedEnemies >= totalEnemies && !portalSpawned && YouWin == false)
+        {
+            SpawnPortal();
+        }
+        else if (defeatedEnemies >= totalEnemies && !portalSpawned && YouWin == true) { 
+            GoToGameOverScene();
+        }
+    }
+
+    private void SpawnPortal()
+    {
+        portalSpawned = true;
+
+        if (portalPrefab != null && portalSpawnPoint != null)
+        {
+            Instantiate(portalPrefab, portalSpawnPoint.position, Quaternion.identity);
+        }
+        else
+        {
+            Debug.LogWarning("Portal prefab or spawn point not assigned!");
+        }
+    }
+    public void GoToGameOverScene()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("youWIN");
     }
 }

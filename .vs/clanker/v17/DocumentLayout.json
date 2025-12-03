@@ -1,22 +1,42 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\CSCI4168\\p2\\clanker\\",
+  "WorkspaceRootPath": "D:\\CSCI4168\\clanker\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|d:\\csci4168\\p2\\clanker\\assets\\scripts\\attackhitbox.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\attackhitbox.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|d:\\csci4168\\clanker\\assets\\scripts\\playercombat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\playercombat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|D:\\CSCI4168\\p2\\clanker\\assets\\scripts\\playerattack.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\playerattack.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|d:\\csci4168\\clanker\\assets\\scripts\\healthbar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\healthbar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|d:\\csci4168\\p2\\clanker\\assets\\scripts\\enemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\enemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|d:\\csci4168\\clanker\\assets\\scripts\\backgroundmusic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\backgroundmusic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|D:\\CSCI4168\\p2\\clanker\\assets\\scripts\\attachweapon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\attachweapon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|D:\\CSCI4168\\clanker\\assets\\scripts\\gameoverui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\gameoverui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|D:\\CSCI4168\\clanker\\assets\\scripts\\bosscar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\bosscar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|D:\\CSCI4168\\clanker\\assets\\scripts\\enemybase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\enemybase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|D:\\CSCI4168\\clanker\\assets\\scripts\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|D:\\CSCI4168\\clanker\\assets\\scripts\\portal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\portal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|D:\\CSCI4168\\clanker\\assets\\scripts\\roombaai.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7ED6DD35-5056-E64D-DA79-9D3734BC993D}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\roombaai.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,59 +46,118 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Enemy.cs",
-              "DocumentMoniker": "D:\\CSCI4168\\p2\\clanker\\Assets\\Scripts\\Enemy.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\Enemy.cs",
-              "ToolTip": "D:\\CSCI4168\\p2\\clanker\\Assets\\Scripts\\Enemy.cs",
-              "RelativeToolTip": "Assets\\Scripts\\Enemy.cs",
-              "ViewState": "AgIAACkAAAAAAAAAAAAzwCAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-24T01:15:15.571Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AttackHitbox.cs",
-              "DocumentMoniker": "D:\\CSCI4168\\p2\\clanker\\Assets\\Scripts\\AttackHitbox.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\AttackHitbox.cs",
-              "ToolTip": "D:\\CSCI4168\\p2\\clanker\\Assets\\Scripts\\AttackHitbox.cs",
-              "RelativeToolTip": "Assets\\Scripts\\AttackHitbox.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAABAAAAAAAAAA==",
+              "Title": "PlayerCombat.cs",
+              "DocumentMoniker": "D:\\CSCI4168\\clanker\\Assets\\Scripts\\PlayerCombat.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\PlayerCombat.cs",
+              "ToolTip": "D:\\CSCI4168\\clanker\\Assets\\Scripts\\PlayerCombat.cs",
+              "RelativeToolTip": "Assets\\Scripts\\PlayerCombat.cs",
+              "ViewState": "AgIAAGEAAAAAAAAAAAAUwHgAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-24T01:11:29.257Z",
+              "WhenOpened": "2025-11-26T20:35:01.632Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "PlayerAttack.cs",
-              "DocumentMoniker": "D:\\CSCI4168\\p2\\clanker\\Assets\\Scripts\\PlayerAttack.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\PlayerAttack.cs",
-              "ToolTip": "D:\\CSCI4168\\p2\\clanker\\Assets\\Scripts\\PlayerAttack.cs",
-              "RelativeToolTip": "Assets\\Scripts\\PlayerAttack.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAADwvxkAAAAfAAAAAAAAAA==",
+              "Title": "HealthBar.cs",
+              "DocumentMoniker": "D:\\CSCI4168\\clanker\\Assets\\Scripts\\HealthBar.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\HealthBar.cs",
+              "ToolTip": "D:\\CSCI4168\\clanker\\Assets\\Scripts\\HealthBar.cs",
+              "RelativeToolTip": "Assets\\Scripts\\HealthBar.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-24T01:07:48.388Z",
+              "WhenOpened": "2025-11-26T20:30:47.34Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "BackgroundMusic.cs",
+              "DocumentMoniker": "D:\\CSCI4168\\clanker\\Assets\\Scripts\\BackgroundMusic.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\BackgroundMusic.cs",
+              "ToolTip": "D:\\CSCI4168\\clanker\\Assets\\Scripts\\BackgroundMusic.cs",
+              "RelativeToolTip": "Assets\\Scripts\\BackgroundMusic.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T20:05:25.384Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "AttachWeapon.cs",
-              "DocumentMoniker": "D:\\CSCI4168\\p2\\clanker\\Assets\\Scripts\\AttachWeapon.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\AttachWeapon.cs",
-              "ToolTip": "D:\\CSCI4168\\p2\\clanker\\Assets\\Scripts\\AttachWeapon.cs",
-              "RelativeToolTip": "Assets\\Scripts\\AttachWeapon.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAAwBgAAAAAAAAAAAAAAA==",
+              "Title": "GameOverUI.cs",
+              "DocumentMoniker": "D:\\CSCI4168\\clanker\\Assets\\Scripts\\GameOverUI.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\GameOverUI.cs",
+              "ToolTip": "D:\\CSCI4168\\clanker\\Assets\\Scripts\\GameOverUI.cs",
+              "RelativeToolTip": "Assets\\Scripts\\GameOverUI.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-24T00:56:32.429Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-26T19:39:29.894Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "BossCar.cs",
+              "DocumentMoniker": "D:\\CSCI4168\\clanker\\Assets\\Scripts\\BossCar.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\BossCar.cs",
+              "ToolTip": "D:\\CSCI4168\\clanker\\Assets\\Scripts\\BossCar.cs",
+              "RelativeToolTip": "Assets\\Scripts\\BossCar.cs",
+              "ViewState": "AgIAAJ4AAAAAAAAAAAAgwKYAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T16:20:31.437Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "EnemyBase.cs",
+              "DocumentMoniker": "D:\\CSCI4168\\clanker\\Assets\\Scripts\\EnemyBase.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\EnemyBase.cs",
+              "ToolTip": "D:\\CSCI4168\\clanker\\Assets\\Scripts\\EnemyBase.cs",
+              "RelativeToolTip": "Assets\\Scripts\\EnemyBase.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAAAswDcAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T15:39:09.367Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Portal.cs",
+              "DocumentMoniker": "D:\\CSCI4168\\clanker\\Assets\\Scripts\\Portal.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Portal.cs",
+              "ToolTip": "D:\\CSCI4168\\clanker\\Assets\\Scripts\\Portal.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Portal.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T15:22:59.747Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "GameManager.cs",
+              "DocumentMoniker": "D:\\CSCI4168\\clanker\\Assets\\Scripts\\GameManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\GameManager.cs",
+              "ToolTip": "D:\\CSCI4168\\clanker\\Assets\\Scripts\\GameManager.cs",
+              "RelativeToolTip": "Assets\\Scripts\\GameManager.cs",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAIwEEAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T15:11:34.681Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "roombaAI.cs",
+              "DocumentMoniker": "D:\\CSCI4168\\clanker\\Assets\\Scripts\\roombaAI.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\roombaAI.cs",
+              "ToolTip": "D:\\CSCI4168\\clanker\\Assets\\Scripts\\roombaAI.cs",
+              "RelativeToolTip": "Assets\\Scripts\\roombaAI.cs",
+              "ViewState": "AgIAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T14:53:06.373Z"
             }
           ]
         }

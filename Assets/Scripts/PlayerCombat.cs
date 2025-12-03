@@ -116,7 +116,15 @@ public class PlayerCombat : MonoBehaviour
         isInvulnerable = true;
 
         // Update UI
-        if (healthBar != null) healthBar.SetHealth(currentHealth);
+        if (healthBar != null)
+        {
+            Debug.Log("Calling healthBar.SetHealth(" + currentHealth + ")");
+            healthBar.SetHealth(currentHealth);
+        }
+        else
+        {
+            Debug.LogError("HealthBar reference is NULL!");
+        }
 
         // Trigger hurt animation if available
         playerAnimation?.PlayHurt();

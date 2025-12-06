@@ -25,6 +25,10 @@ public class RoombaAI : MonoBehaviour
         // Default to current transform if not assigned
         if (spriteTransform == null) spriteTransform = transform;
         
+        // DETACH WAYPOINTS so they don't move with the enemy
+        if (pointA != null) pointA.parent = null;
+        if (pointB != null) pointB.parent = null;
+
         // Start patrol
         currentTarget = pointB;
     }

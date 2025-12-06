@@ -25,9 +25,12 @@ public class EnemyBase : MonoBehaviour
     }
 
     // This is the function PlayerCombat and PlayerMovement call
-    public void TakeDamage(int damageAmount, string attackType)
+    public void ApplyDamage(int damageAmount, string attackType)
     {
         currentHealth -= damageAmount;
+
+        // Trigger Hit Stop
+        HitStopManager.TriggerHitStop(0.1f);
 
         Debug.Log($"<color=orange>ENEMY HIT:</color> Registered <b>{attackType}</b>. Damage: {damageAmount}. Health remaining: {currentHealth}");
 

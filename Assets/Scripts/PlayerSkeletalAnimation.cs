@@ -22,6 +22,28 @@ public class PlayerSkeletalAnimation : MonoBehaviour
     public float kickDuration = 0.5f;
     public float hurtDuration = 0.5f;
 
+    [Header("Effect Settings")]
+    [Header("Punch Effect")]
+    public SpriteRenderer punchEffectRenderer;
+    public Sprite[] punchEffectFrames;
+    public float punchEffectSpeed = 0.1f;
+    public Vector2 punchMoveOffset = new Vector2(1f, 0f);
+    public float punchMoveSpeed = 5f;
+
+    [Header("Kick Effect")]
+    public SpriteRenderer kickEffectRenderer;
+    public Sprite[] kickEffectFrames;
+    public float kickEffectSpeed = 0.1f;
+    public Vector2 kickMoveOffset = new Vector2(0.5f, 0.5f);
+    public float kickMoveSpeed = 5f;
+
+    // Internal state for effects
+    private Vector3 punchInitialPos;
+    private Vector3 kickInitialPos;
+    
+    // Frenzy Reference
+    private PlayerFrenzy playerFrenzy;
+
     [Header("References")]
     public Animator animator;
     public Rigidbody2D rb;
@@ -38,12 +60,16 @@ public class PlayerSkeletalAnimation : MonoBehaviour
     // Private state variables
     private bool isGrounded;
     private bool isWallSliding;
-    private bool isAttacking = false;
+    public bool IsAttacking { get; private set; } = false;
     private bool isHurt = false;
     private bool isSwinging = false;
     
     // Track current animation to avoid spamming Play()
     private string currentAnimState = "";
+
+    // Coroutine tracking
+    private Coroutine currentAttackCoroutine;
+    private Coroutine currentEffectCoroutine;
 
     void Start()
     {
@@ -54,6 +80,13 @@ public class PlayerSkeletalAnimation : MonoBehaviour
         {
             Debug.LogError("PlayerSkeletalAnimation: No Animator found! Please assign it in the inspector.");
         }
+
+        // Store initial positions of effect renderers
+        if (punchEffectRenderer != null) punchInitialPos = punchEffectRenderer.transform.localPosition;
+        if (kickEffectRenderer != null) kickInitialPos = kickEffectRenderer.transform.localPosition;
+
+        playerFrenzy = GetComponent<PlayerFrenzy>();
+        if (playerFrenzy == null) playerFrenzy = GetComponentInParent<PlayerFrenzy>();
     }
 
     void FixedUpdate()
@@ -107,10 +140,10 @@ public class PlayerSkeletalAnimation : MonoBehaviour
             newAnimState = hurtAnim;
         }
         // Priority 2: Attacking
-        else if (isAttacking)
+        else if (IsAttacking)
         {
             // We don't change the state here because PlayAttack() sets the specific attack state (Punch/Kick)
-            // and we want to hold that state until isAttacking becomes false.
+            // and we want to hold that state until IsAttacking becomes false.
             return; 
         }
         // Priority 3: Swinging
@@ -185,22 +218,103 @@ public class PlayerSkeletalAnimation : MonoBehaviour
         }
 
         // Interrupt existing attack if any
-        StopCoroutine("AttackCoroutine");
-        StartCoroutine(AttackCoroutine(duration, animToPlay));
+        if (currentAttackCoroutine != null) StopCoroutine(currentAttackCoroutine);
+        if (currentEffectCoroutine != null) StopCoroutine(currentEffectCoroutine);
+
+        // Reset effects immediately
+        if (punchEffectRenderer != null) { punchEffectRenderer.enabled = false; punchEffectRenderer.sprite = null; }
+        if (kickEffectRenderer != null) { kickEffectRenderer.enabled = false; kickEffectRenderer.sprite = null; }
+
+        currentAttackCoroutine = StartCoroutine(AttackCoroutine(duration, animToPlay, attackType));
     }
 
-    private IEnumerator AttackCoroutine(float duration, string animName)
+    private IEnumerator AttackCoroutine(float duration, string animName, string attackType)
     {
-        isAttacking = true;
+        IsAttacking = true;
         
         // Force play the attack animation immediately
         ChangeAnimationState(animName);
 
+        // --- Play Effect Animation ---
+        // Only play normal effects if Frenzy is NOT active
+        if (playerFrenzy == null || !playerFrenzy.IsFrenzyActive)
+        {
+            SpriteRenderer targetRenderer = null;
+            Sprite[] effects = null;
+            float speed = 0.1f;
+            Vector2 moveOffset = Vector2.zero;
+            float moveSpeed = 0f;
+            Vector3 initialPos = Vector3.zero;
+
+            if (attackType == "Punch") 
+            {
+                targetRenderer = punchEffectRenderer;
+                effects = punchEffectFrames;
+                speed = punchEffectSpeed;
+                moveOffset = punchMoveOffset;
+                moveSpeed = punchMoveSpeed;
+                initialPos = punchInitialPos;
+            }
+            else if (attackType == "Kick") 
+            {
+                targetRenderer = kickEffectRenderer;
+                effects = kickEffectFrames;
+                speed = kickEffectSpeed;
+                moveOffset = kickMoveOffset;
+                moveSpeed = kickMoveSpeed;
+                initialPos = kickInitialPos;
+            }
+
+            if (targetRenderer != null && effects != null && effects.Length > 0)
+            {
+                currentEffectCoroutine = StartCoroutine(PlayEffectAnimation(targetRenderer, effects, speed, initialPos, moveOffset, moveSpeed));
+            }
+        }
+
         yield return new WaitForSeconds(duration);
 
-        isAttacking = false;
+        IsAttacking = false;
         // The Update() loop will take over and transition back to Idle/Run/etc.
         currentAnimState = ""; // Force update in next frame
+        currentAttackCoroutine = null;
+    }
+
+    private IEnumerator PlayEffectAnimation(SpriteRenderer renderer, Sprite[] frames, float animSpeed, Vector3 startPos, Vector2 offset, float moveSpeed)
+    {
+        renderer.enabled = true;
+        renderer.transform.localPosition = startPos; // Reset to start
+
+        // Calculate target position based on facing direction
+        // Assuming the parent flips scale.x, localPosition logic might need adjustment if it doesn't.
+        // If the parent flips, local offset X is automatically flipped relative to world, which is good.
+        Vector3 targetPos = startPos + (Vector3)offset;
+
+        // We run the animation and movement in parallel within this coroutine
+        int frameCount = frames.Length;
+        float totalDuration = frameCount * animSpeed;
+        float elapsed = 0f;
+        int currentFrame = 0;
+
+        while (elapsed < totalDuration)
+        {
+            elapsed += Time.deltaTime;
+
+            // 1. Update Sprite
+            // Calculate frame based on time to be precise
+            currentFrame = Mathf.Clamp(Mathf.FloorToInt(elapsed / animSpeed), 0, frameCount - 1);
+            renderer.sprite = frames[currentFrame];
+
+            // 2. Update Position (Move towards target)
+            // We move continuously towards the target
+            renderer.transform.localPosition = Vector3.MoveTowards(renderer.transform.localPosition, targetPos, moveSpeed * Time.deltaTime);
+
+            yield return null;
+        }
+
+        renderer.sprite = null;
+        renderer.enabled = false;
+        renderer.transform.localPosition = startPos; // Reset for next time
+        currentEffectCoroutine = null;
     }
 
     public void PlayHurt()

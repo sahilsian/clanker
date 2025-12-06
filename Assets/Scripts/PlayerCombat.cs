@@ -45,6 +45,9 @@ public class PlayerCombat : MonoBehaviour
     {
         if (value.isPressed)
         {
+            // Prevent spamming/interrupting attacks
+            if (playerAnimation != null && playerAnimation.IsAttacking) return;
+
             // Play punch animation
             playerAnimation?.PlayAttack("Punch");
             PerformAttack(punchPoint, punchRange, punchDamage, "Punch");
@@ -55,6 +58,9 @@ public class PlayerCombat : MonoBehaviour
     {
         if (value.isPressed)
         {
+            // Prevent spamming/interrupting attacks
+            if (playerAnimation != null && playerAnimation.IsAttacking) return;
+
             // Play kick animation
             playerAnimation?.PlayAttack("Kick");
             PerformAttack(kickPoint, kickRange, kickDamage, "Kick");
@@ -83,7 +89,7 @@ public class PlayerCombat : MonoBehaviour
             EnemyBase genericEnemy = hit.GetComponent<EnemyBase>();
             if (genericEnemy != null)
             {
-                genericEnemy.TakeDamage(damage, attackType);
+                genericEnemy.ApplyDamage(damage, attackType);
             }
 
             // 2. Check for Boss (Boss handles damage differently)

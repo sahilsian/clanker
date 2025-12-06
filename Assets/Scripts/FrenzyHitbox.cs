@@ -46,7 +46,7 @@ public class FrenzyHitbox : MonoBehaviour
             if (enemy != null)
             {
                 Debug.Log($"[FrenzyHitbox] Hit {hit.name} for {damage} damage!");
-                enemy.TakeDamage(damage, "FrenzyAttack");
+                enemy.ApplyDamage(damage, "FrenzyAttack");
             }
 
             // 2. Check for BossCar

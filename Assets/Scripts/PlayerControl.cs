@@ -19,8 +19,10 @@ public class PlayerMovement : MonoBehaviour
     public float doubleJumpForceMultiplier = 0.5f;
 
     [Header("Wall Run Settings")]
-    public float wallSlideSpeed = 2f; 
+    public float wallSlideSpeed = 2f;
+    public float wallRunUpwardForce = 3f; // Upward momentum while wall running
     public Vector2 wallJumpForce = new Vector2(7f, 14f);
+    public float wallRunDuration = 2f; // How long the player can wall run before needing to touch ground
 
     [Header("Detection")]
     public Transform groundCheck;
@@ -33,8 +35,6 @@ public class PlayerMovement : MonoBehaviour
     
     public LayerMask enemyLayer; 
 
-    // REMOVED: public Transform spriteTransform; -> We now flip the whole object!
-
     // Internal State
     private Rigidbody2D rb;
     private float horizontalMove = 0f;
@@ -43,20 +43,19 @@ public class PlayerMovement : MonoBehaviour
     private bool isTouchingWall;
     private bool isWallSliding;
     public bool IsStomping { get; private set; }
+    
     [Header("Knockback")]
     public float knockbackForce = 8f;
+    
     [Header("Knockback/Control")]
     public float knockbackLockDuration = 0.15f;
     private bool inputLocked = false;
+    
     [Header("Hurt Settings")]
-    [Tooltip("How long player input is locked when the player is hurt (in seconds)")]
-    public float hurtInputLockDuration = 0.25f;
-
-    // Track if wall run has been used in current air-time
-    private bool hasWallRunInAir = false;
-    // Double Jump Logic
-    private bool canDoubleJump = true;
-
+    public float hurtInputLockDuration = 0.5f;
+    public int maxJumps = 2;
+    private int jumpCount;
+    private float wallRunTimeRemaining; // Timer for wall run duration
     private PlayerSkeletalAnimation playerAnim;
 
     private void Start()
@@ -64,23 +63,20 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         playerAnim = GetComponentInChildren<PlayerSkeletalAnimation>();
+        wallRunTimeRemaining = wallRunDuration; // Start with full wall run time
+        Debug.Log($"[PlayerMovement] Wall Layer Mask: {wallLayer.value}");
     }
 
     private void FixedUpdate()
     {
-        // 1. Checks
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
         isTouchingWall = Physics2D.OverlapCircle(wallCheck.position, wallCheckRadius, wallLayer);
 
         if (isGrounded)
         {
-            hasWallRunInAir = false;
-            canDoubleJump = true;
-            // Ensure rotation is reset when grounded
-            transform.rotation = Quaternion.Euler(0, 0, 0);
+            wallRunTimeRemaining = wallRunDuration; // Reset wall run timer when grounded
         }
 
-        // 2. Logic
         HandleWallSliding();
         CheckForStomp();
 
@@ -95,14 +91,30 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleWallSliding()
     {
-        if (isTouchingWall && !isGrounded && horizontalMove != 0 && !hasWallRunInAir)
+        if (isTouchingWall) Debug.Log($"[WallRun] Touching: {isTouchingWall}, Grounded: {isGrounded}, Input: {horizontalMove}, TimeLeft: {wallRunTimeRemaining:F2}, Sliding: {isWallSliding}");
+
+        // Can wall slide if: touching wall, airborne, moving toward wall, and have time remaining
+        bool canWallSlide = isTouchingWall && !isGrounded && horizontalMove != 0 && wallRunTimeRemaining > 0;
+
+        if (canWallSlide)
         {
+            if (!isWallSliding)
+            {
+                Debug.Log("[WallRun] Started Wall Sliding");
+                jumpCount = 0; // Reset jumps when grabbing wall
+            }
             isWallSliding = true;
-            canDoubleJump = true; // Reset double jump when grabbing wall
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, Mathf.Clamp(rb.linearVelocity.y, -wallSlideSpeed, float.MaxValue));
+            
+            // Consume wall run time
+            wallRunTimeRemaining -= Time.fixedDeltaTime;
+            
+            // Prevent any downward movement during wall run - only maintain or go up
+            float targetYVelocity = Mathf.Max(rb.linearVelocity.y, 0f) + wallRunUpwardForce * Time.fixedDeltaTime;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, targetYVelocity);
         }
         else
         {
+            if (isWallSliding) Debug.Log("[WallRun] Stopped Wall Sliding");
             isWallSliding = false;
         }
     }
@@ -129,7 +141,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     Debug.Log("Player Stomped an Enemy!");
                     if (!IsStomping) StartCoroutine(StompWindow());
-                    enemy.TakeDamage(5, "Stomp"); 
+                    enemy.ApplyDamage(5, "Stomp"); 
                     Bounce();
                 }
             }
@@ -175,6 +187,7 @@ public class PlayerMovement : MonoBehaviour
     private void Bounce()
     {
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, stompBounceForce);
+        jumpCount = 0; // Reset to 0 so we can do a full set of jumps (Jump + Double Jump)
     }
 
     // --- INPUT SYSTEM MESSAGES ---
@@ -182,30 +195,31 @@ public class PlayerMovement : MonoBehaviour
     public void OnMove(InputValue value)
     {
         if (inputLocked) return;
-        Vector2 moveInput = value.Get<Vector2>();
-        horizontalMove = moveInput.x;
+        Vector2 input = value.Get<Vector2>();
+        horizontalMove = input.x;
     }
 
     public void OnJump(InputValue value)
     {
-        if (value.isPressed)
+        if (inputLocked || !value.isPressed) return;
+
+        // Wall jump removed - use normal jump logic instead
+        // Normal & Double Jump
+        if (isGrounded || jumpCount < maxJumps)
         {
-            if (inputLocked) return;
-            if (isGrounded)
+            // If grounded, force reset (safety)
+            if (isGrounded) jumpCount = 0;
+
+            jumpCount++;
+
+            if (jumpCount == 1)
             {
+                // First Jump
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             }
-            else if (isWallSliding)
+            else
             {
-                isWallSliding = false;
-                hasWallRunInAir = true; // Consume the wall run ability
-                float jumpDirection = isFacingRight ? -1 : 1; 
-                rb.linearVelocity = new Vector2(jumpDirection * wallJumpForce.x, wallJumpForce.y);
-            }
-            else if (canDoubleJump)
-            {
-                canDoubleJump = false;
-                // Apply reduced force for double jump
+                // Double Jump (or triple, etc.)
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce * doubleJumpForceMultiplier);
                 if (playerAnim != null) playerAnim.TriggerJump();
                 StartCoroutine(DoDoubleJumpSpin());
@@ -289,7 +303,7 @@ public class PlayerMovement : MonoBehaviour
     // Public helper to reset double jump (used by GrapplingHook)
     public void ResetDoubleJump()
     {
-        canDoubleJump = true;
+        jumpCount = 0;
     }
 
     private void OnDrawGizmos()

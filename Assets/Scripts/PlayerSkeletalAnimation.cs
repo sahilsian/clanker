@@ -16,6 +16,7 @@ public class PlayerSkeletalAnimation : MonoBehaviour
     public string kickAnim = "Kick";
     public string hurtAnim = "Hurt";
     public string swingAnim = "Swing";
+    public string dashAnim = "Dash";
     
     [Header("Animation Timing")]
     public float punchDuration = 0.25f;
@@ -63,6 +64,7 @@ public class PlayerSkeletalAnimation : MonoBehaviour
     public bool IsAttacking { get; private set; } = false;
     private bool isHurt = false;
     private bool isSwinging = false;
+    private bool isDashing = false;
     
     // Track current animation to avoid spamming Play()
     private string currentAnimState = "";
@@ -146,7 +148,12 @@ public class PlayerSkeletalAnimation : MonoBehaviour
             // and we want to hold that state until IsAttacking becomes false.
             return; 
         }
-        // Priority 3: Swinging
+        // Priority 3: Dashing (NEW)
+        else if (isDashing)
+        {
+            newAnimState = dashAnim;
+        }
+        // Priority 4: Swinging
         else if (isSwinging)
         {
             newAnimState = swingAnim;
@@ -334,6 +341,20 @@ public class PlayerSkeletalAnimation : MonoBehaviour
     public void SetSwinging(bool swinging)
     {
         isSwinging = swinging;
+    }
+
+    public void PlayDash(float duration)
+    {
+        StopCoroutine("DashCoroutine");
+        StartCoroutine(DashCoroutine(duration));
+    }
+
+    private IEnumerator DashCoroutine(float duration)
+    {
+        isDashing = true;
+        yield return new WaitForSeconds(duration);
+        isDashing = false;
+        currentAnimState = ""; // Force update
     }
 
     private void OnDrawGizmos()

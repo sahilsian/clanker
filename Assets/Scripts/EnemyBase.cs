@@ -6,6 +6,7 @@ public class EnemyBase : MonoBehaviour
     [Header("Stats")]
     public int maxHealth = 5;
     public int contactDamage = 1;
+    public bool canBeStomped = true;
     [SerializeField] private int currentHealth;
 
     [Header("Visual Feedback")]

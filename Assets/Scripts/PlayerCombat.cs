@@ -165,6 +165,29 @@ public class PlayerCombat : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// Allows external scripts (like Dash) to trigger invulnerability.
+    /// </summary>
+    public void SetTemporaryInvulnerability(float duration)
+    {
+        if (isInvulnerable) return; // Already safe
+        StartCoroutine(ExternalInvulRoutine(duration));
+    }
+
+    private IEnumerator ExternalInvulRoutine(float duration)
+    {
+        isInvulnerable = true;
+        // Debug.Log($"<color=yellow>PLAYER INVULNERABLE</color> for {duration}s");
+        
+        // Ghostly effect
+        if (spriteRenderer != null) spriteRenderer.color = new Color(1f, 1f, 1f, 0.5f);
+
+        yield return new WaitForSeconds(duration);
+
+        isInvulnerable = false;
+        if (spriteRenderer != null) spriteRenderer.color = originalColor;
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // If player is stomping (hit enemy from above), don't take contact damage

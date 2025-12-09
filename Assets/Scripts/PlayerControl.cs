@@ -57,6 +57,9 @@ public class PlayerMovement : MonoBehaviour
     private int jumpCount;
     private float wallRunTimeRemaining; // Timer for wall run duration
     private PlayerSkeletalAnimation playerAnim;
+    
+    // Property to allow other scripts (like PlayerDash) to take control
+    public bool IsExternalMovementActive { get; set; } = false;
 
     private void Start()
     {
@@ -81,7 +84,8 @@ public class PlayerMovement : MonoBehaviour
         CheckForStomp();
 
         // 3. Movement Application
-        if (!isWallSliding)
+        // Allow external scripts (like Dash) to override movement
+        if (!IsExternalMovementActive && !isWallSliding)
         {
             rb.linearVelocity = new Vector2(horizontalMove * moveSpeed, rb.linearVelocity.y);
         }
@@ -139,6 +143,9 @@ public class PlayerMovement : MonoBehaviour
                 EnemyBase enemy = enemyStomped.GetComponent<EnemyBase>();
                 if (enemy != null)
                 {
+                    // Check if this enemy allows stomping
+                    if (!enemy.canBeStomped) return;
+
                     Debug.Log("Player Stomped an Enemy!");
                     if (!IsStomping) StartCoroutine(StompWindow());
                     enemy.ApplyDamage(5, "Stomp"); 

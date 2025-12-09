@@ -7,6 +7,7 @@ TagManager:
   - ground
   - Enemy
   - Wall
+  - Freanzy
   layers:
   - Default
   - TransparentFX
@@ -17,9 +18,9 @@ TagManager:
   - ground
   - enemy
   - Wall
-  - 
-  - 
-  - 
+  - grapplePoint
+  - pillar
+  - player
   - 
   - 
   - 

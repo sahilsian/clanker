@@ -116,11 +116,15 @@ public class BossCar : MonoBehaviour
         }
         
         // 2. DAMAGE LOGIC (Kick/Punch)
-        else if (type == "Kick" || type == "Punch")
+        else if (type == "Kick" || type == "Punch" || type == "FrenzyAttack")
         {
             if (isStunned)
             {
                 maxHealth -= damageAmount;
+
+                // Trigger Hit Stop
+                HitStopManager.TriggerHitStop(0.1f);
+
                 Debug.Log($"BOSS HIT by {type}! Damage: {damageAmount}. HP: {maxHealth}");
 
                 if (maxHealth <= 0)

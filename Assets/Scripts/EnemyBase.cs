@@ -6,6 +6,7 @@ public class EnemyBase : MonoBehaviour
     [Header("Stats")]
     public int maxHealth = 5;
     public int contactDamage = 1;
+    public bool canBeStomped = true;
     [SerializeField] private int currentHealth;
 
     [Header("Visual Feedback")]
@@ -26,10 +27,13 @@ public class EnemyBase : MonoBehaviour
     }
 
     // This is the function PlayerCombat and PlayerMovement call
-    public void TakeDamage(int damageAmount, string attackType)
+    public void ApplyDamage(int damageAmount, string attackType)
     {
         // Apply damage, trigger feedback, and destroy the enemy when health is gone
         currentHealth -= damageAmount;
+
+        // Trigger Hit Stop
+        HitStopManager.TriggerHitStop(0.1f);
 
         Debug.Log($"<color=orange>ENEMY HIT:</color> Registered <b>{attackType}</b>. Damage: {damageAmount}. Health remaining: {currentHealth}");
 

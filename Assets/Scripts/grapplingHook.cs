@@ -8,6 +8,10 @@ public class GrapplingHook : MonoBehaviour
     public LayerMask grappleLayer;
     public float swingForce = 10f;
     public float jumpOffForce = 10f;
+    
+    [Header("Rope Climbing")]
+    public float climbSpeed = 3f; // How fast the player climbs up/down the rope
+    public float minRopeLength = 0.5f; // Minimum rope length when fully climbed up
 
     [Header("References")]
     public DistanceJoint2D distanceJoint;
@@ -21,6 +25,7 @@ public class GrapplingHook : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 targetAnchor;
     private bool isGrappling = false;
+    private float maxRopeLength; // Stores the initial rope length (max we can extend to)
     // For debug: track E key state to log press/release events
     private bool prevEPressed = false;
 
@@ -72,10 +77,11 @@ public class GrapplingHook : MonoBehaviour
             JumpOff();
         }
 
-        // 3. SWING CONTROL
+        // 3. SWING CONTROL & ROPE CLIMBING
         if (isGrappling)
         {
             HandleSwingMovement();
+            HandleRopeClimbing();
             UpdateRopeVisuals();
         }
     }
@@ -118,6 +124,7 @@ public class GrapplingHook : MonoBehaviour
             distanceJoint.autoConfigureConnectedAnchor = false;
             distanceJoint.connectedAnchor = targetAnchor;
             distanceJoint.distance = Vector2.Distance(transform.position, targetAnchor);
+            maxRopeLength = distanceJoint.distance; // Store initial length as max
             distanceJoint.enabled = true;
             isGrappling = true;
 
@@ -170,6 +177,29 @@ public class GrapplingHook : MonoBehaviour
         // Apply force along tangent to swing
         rb.AddForce(tangent * dir * swingForce);
         if (enableDebugLogs) Debug.Log($"{debugTag} Swing input dir={dir}, appliedForce={(tangent * dir * swingForce)}");
+    }
+
+    void HandleRopeClimbing()
+    {
+        // Read W/S keys for climbing up/down the rope
+        if (Keyboard.current == null) return;
+
+        float climbUp = Keyboard.current.wKey.isPressed ? 1f : 0f;
+        float climbDown = Keyboard.current.sKey.isPressed ? 1f : 0f;
+        float climbDir = climbUp - climbDown; // Positive = climb up (shorten rope), Negative = climb down (lengthen rope)
+
+        if (Mathf.Abs(climbDir) < 0.001f) return;
+
+        // Adjust the rope length
+        float newDistance = distanceJoint.distance - (climbDir * climbSpeed * Time.deltaTime);
+        
+        // Clamp between min and max rope length
+        newDistance = Mathf.Clamp(newDistance, minRopeLength, maxRopeLength);
+        
+        distanceJoint.distance = newDistance;
+
+        if (enableDebugLogs && Time.frameCount % 30 == 0) 
+            Debug.Log($"{debugTag} Rope climbing: dir={climbDir}, newDistance={newDistance:F2}, min={minRopeLength}, max={maxRopeLength:F2}");
     }
 
     void UpdateRopeVisuals()

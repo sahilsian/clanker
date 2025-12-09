@@ -140,6 +140,16 @@ public class PlayerMovement : MonoBehaviour
                     return; 
                 }
 
+                Boss2 boss2 = enemyStomped.GetComponent<Boss2>();
+                if (boss2 != null && boss2.CanBeStomp())
+                {
+                    Debug.Log("Player Stomped Boss2!");
+                    if (!IsStomping) StartCoroutine(StompWindow());
+                    boss2.TakeStomp(5); // 5 damage per stomp
+                    Bounce();
+                    return;
+                }
+
                 EnemyBase enemy = enemyStomped.GetComponent<EnemyBase>();
                 if (enemy != null)
                 {

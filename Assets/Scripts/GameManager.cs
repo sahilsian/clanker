@@ -1,143 +1,167 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum GameState
+{
+    Start,
+    Playing,
+    Paused,
+    GameOver
+}
+
 public class GameManager : MonoBehaviour
 {
-    public enum GameState
-    {
-        StartMenu,
-        Playing,
-        Paused,
-        GameOver
-    }
+    public static GameManager Instance;
 
-    public static GameManager Instance { get; private set; }
+    [Header("UI Groups")]
+    public GameObject hudGroup;
+    public GameObject startScreen;
+    public GameObject pauseScreen;
+    public GameObject gameOverScreen;
 
-    [SerializeField]
-    private GameUIManager uiManager;
+    [Header("UI Elements")]
+    public GameObject healthBar;
 
-    public GameState CurrentState { get; private set; } = GameState.StartMenu;
+    [Header("Fail Conditions")]
+    [Tooltip("If the player falls below this Y, trigger a restart.")]
+    public float fallDeathY = -7f;
+    public Transform player;
+
+    [Header("State")]
+    public GameState currentState = GameState.Start;
+
+    public bool isDialogueActive = false;
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
+        // Establish singleton reference for other scripts
         Instance = this;
     }
 
     private void Start()
     {
-        if (uiManager == null)
-        {
-            uiManager = FindObjectOfType<GameUIManager>();
-        }
-
-        if (uiManager != null)
-        {
-            uiManager.Initialize(this);
-        }
-        else
-        {
-            Debug.LogError("GameUIManager not found in the scene.");
-        }
-
-        EnterStartMenu();
+        // Begin at the start screen
+        SetState(GameState.Start);
     }
 
     private void Update()
     {
+        // Handle pause toggles and death checks unless dialogue is active
+        if (isDialogueActive) return;
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            TogglePause();
+            if (currentState == GameState.Playing)
+                SetState(GameState.Paused);
+            else if (currentState == GameState.Paused)
+                SetState(GameState.Playing);
         }
+
+        CheckFallDeath();
     }
 
-    public void RegisterUI(GameUIManager manager)
+    public void SetState(GameState newState)
     {
-        uiManager = manager;
-        uiManager.Initialize(this);
-    }
+        // Swap UI and timescale based on the requested game state
+        currentState = newState;
 
-    private void EnterStartMenu()
-    {
-        CurrentState = GameState.StartMenu;
-        Time.timeScale = 0f;
-        uiManager?.ShowStartMenu();
-    }
+        if (startScreen != null)
+            startScreen.SetActive(newState == GameState.Start);
 
-    public void StartGame()
-    {
-        if (CurrentState == GameState.Playing)
-            return;
+        if (pauseScreen != null)
+            pauseScreen.SetActive(newState == GameState.Paused);
 
-        CurrentState = GameState.Playing;
-        Time.timeScale = 1f;
-        uiManager?.ShowHUD();
-    }
+        if (gameOverScreen != null)
+            gameOverScreen.SetActive(newState == GameState.GameOver);
 
-    public void TogglePause()
-    {
-        if (CurrentState == GameState.StartMenu || CurrentState == GameState.GameOver)
-            return;
+        if (hudGroup != null)
+            hudGroup.SetActive(newState == GameState.Playing);
 
-        if (CurrentState == GameState.Paused)
+        if (healthBar != null)
+            healthBar.SetActive(newState == GameState.Playing);
+
+        if (newState == GameState.Start || newState == GameState.Playing)
+            hasFallen = false;
+
+        switch (newState)
         {
-            ResumeGame();
+            case GameState.Start:
+            case GameState.Paused:
+            case GameState.GameOver:
+                Time.timeScale = 0f;
+                break;
+
+            case GameState.Playing:
+                Time.timeScale = 1f;
+                break;
         }
-        else
-        {
-            PauseGame();
-        }
     }
 
-    public void PauseGame()
-    {
-        if (CurrentState != GameState.Playing)
-            return;
+    // -------- Dialogue Hooks --------
 
-        CurrentState = GameState.Paused;
-        Time.timeScale = 0f;
-        uiManager?.ShowPauseMenu();
+    public void BeginDialogue()
+    {
+        // Pause gameplay input reactions while dialogue is shown
+        isDialogueActive = true;
     }
 
-    public void ResumeGame()
+    public void EndDialogue()
     {
-        if (CurrentState != GameState.Paused)
-            return;
-
-        CurrentState = GameState.Playing;
-        Time.timeScale = 1f;
-        uiManager?.ShowHUD();
+        // Resume gameplay input reactions after dialogue closes
+        isDialogueActive = false;
     }
 
-    public void TriggerGameOver()
+    // -------- Button Callbacks --------
+
+    public void OnStartButton()
     {
-        CurrentState = GameState.GameOver;
-        Time.timeScale = 0f;
-        uiManager?.ShowGameOver();
+        // Start button from start menu
+        SetState(GameState.Playing);
     }
 
-    public void RestartLevel()
+    public void OnResumeButton()
     {
+        // Resume button from pause menu
+        SetState(GameState.Playing);
+    }
+
+    public void OnRestartButton()
+    {
+        // Reload current scene and unpause time
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void ReturnToMainMenu()
+    public void ShowGameOver()
     {
-        EnterStartMenu();
+        // External trigger to enter the game over state
+        SetState(GameState.GameOver);
     }
 
-    public void QuitGame()
-    {
-        Application.Quit();
+    // -------- Fail Conditions --------
 
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#endif
+    private bool hasFallen;
+
+    private void CheckFallDeath()
+    {
+        // Detect if the player has fallen below the threshold and end the game
+        if (hasFallen) return;
+        if (currentState != GameState.Playing) return;
+
+        if (player == null)
+        {
+            var playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null) player = playerObj.transform;
+        }
+
+        if (player == null) return;
+
+        if (player.position.y < fallDeathY)
+        {
+            hasFallen = true;
+            // Disable the player if present, then show the Game Over UI so the player can restart
+            player.gameObject.SetActive(false);
+            SetState(GameState.GameOver);
+        }
     }
 }

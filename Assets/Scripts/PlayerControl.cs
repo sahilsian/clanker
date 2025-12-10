@@ -1,21 +1,32 @@
 using UnityEngine;
+using System.Collections;
 using UnityEngine.InputSystem;
 
 // Handles player movement, jumping, combat, and wall sliding.
 // Requires PlayerInput component set to "Send Messages".
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(PlayerInput))]
-public class PlayerController : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
-    [Header("Movement")]
+    [Header("Movement Settings")]
     public float moveSpeed = 8f;
     public float jumpForce = 15f;
     public float stompBounceForce = 8f; // How high the player bounces after stomping
 
-    [Header("Ground Check")]
+    [Header("Wall Run Settings")]
+    public float wallSlideSpeed = 2f; 
+    public Vector2 wallJumpForce = new Vector2(7f, 14f);
+
+    [Header("Detection")]
     public Transform groundCheck;
-    public LayerMask groundLayer;
     public float groundCheckRadius = 0.2f;
+    public LayerMask groundLayer;
+    
+    public Transform wallCheck;
+    public float wallCheckRadius = 0.3f;
+    public LayerMask wallLayer;
+    
+    public LayerMask enemyLayer; 
 
     [Header("Graphics")]
     public Transform spriteTransform;
@@ -33,6 +44,7 @@ public class PlayerController : MonoBehaviour
     public float wallSlideSpeed = 2f; // How fast we slide down
     public Vector2 wallJumpForce = new Vector2(7f, 14f); // x = away, y = up
 
+    // Internal State
     private Rigidbody2D rb;
     private float horizontalMove = 0f;
     private bool isGrounded;
@@ -44,6 +56,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        // Cache rigidbody and lock rotation so physics doesn't tip the player over
         rb = GetComponent<Rigidbody2D>();
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
@@ -106,6 +119,8 @@ public class PlayerController : MonoBehaviour
 
     public void OnMove(InputValue value)
     {
+        // Capture horizontal input unless locked by knockback/hurt
+        if (inputLocked) return;
         Vector2 moveInput = value.Get<Vector2>();
         horizontalMove = moveInput.x;
     }
@@ -138,15 +153,12 @@ public class PlayerController : MonoBehaviour
 
         if (horizontalMove < 0 && isFacingRight)
         {
-            // Face left
-            isFacingRight = false;
-            spriteTransform.localScale = new Vector3(-Mathf.Abs(spriteTransform.localScale.x), spriteTransform.localScale.y, spriteTransform.localScale.z);
+            Flip();
         }
+        // If moving RIGHT and currently facing LEFT
         else if (horizontalMove > 0 && !isFacingRight)
         {
-            // Face right
-            isFacingRight = true;
-            spriteTransform.localScale = new Vector3(Mathf.Abs(spriteTransform.localScale.x), spriteTransform.localScale.y, spriteTransform.localScale.z);
+            Flip();
         }
     }
 
@@ -168,22 +180,27 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void OnUppercut(InputValue value)
+    private IEnumerator TemporaryInputLock(float duration)
     {
-        if (value.isPressed)
-        {
-            Debug.Log("PERFORM HEAVY UPPERCUT!");
-            // TODO: Uppercut attack logic
-        }
+        // Temporarily block movement input (used during knockback or hurt)
+        // prevent further input and clear any residual horizontal input
+        inputLocked = true;
+        horizontalMove = 0f;
+        Debug.Log($"[PlayerMovement] Input locked for {duration} seconds");
+        yield return new WaitForSeconds(duration);
+        inputLocked = false;
+        Debug.Log("[PlayerMovement] Input unlocked");
     }
 
-    public void OnDodgeRoll(InputValue value)
+    // Public helper to lock input for a given duration (used by other scripts like PlayerCombat)
+    public void LockInput(float duration)
     {
-        if (value.isPressed)
-        {
-            Debug.Log("PERFORM DODGE-ROLL!");
-            // TODO: Dodge roll logic
-        }
+        // Start the lock coroutine and immediately clear stored horizontal input
+        // Start the same temporary lock coroutine
+        // ensure horizontal input is cleared immediately
+        horizontalMove = 0f;
+        Debug.Log($"[PlayerMovement] LockInput called for {duration} seconds");
+        StartCoroutine(TemporaryInputLock(duration));
     }
 
     // --- MODIFIED: OnDrawGizmos ---

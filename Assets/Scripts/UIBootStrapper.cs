@@ -11,19 +11,21 @@ public class UIBootstrapper : MonoBehaviour
     private GameObject startPanel;
     private GameObject pausePanel;
     private GameObject gameOverPanel;
-    private HealthBar healthBar;
-    private GameUIManager uiManager;
+    private HealthBar healthBar;      // or SimpleHealthBar if that's what you use
+    private GameManager gameManager;  // updated: use GameManager instead of GameUIManager
 
     void Awake()
     {
+        // Build all UI elements and the GameManager at runtime
         CreateCanvas();
         CreatePanels();
         CreateHealthBar();
-        CreateUIManager();
+        CreateGameManager();
     }
 
     void CreateCanvas()
     {
+        // Spawn a basic overlay canvas for all UI
         canvasGO = new GameObject("MainCanvas");
         var canvas = canvasGO.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
@@ -33,13 +35,17 @@ public class UIBootstrapper : MonoBehaviour
 
     void CreatePanels()
     {
+        // Create UI panels for HUD, start, pause, and game over states
         // HUD
         hudPanel = CreatePanel("HUD_Panel", new Color(0, 0, 0, 0f));
+
         // Start menu
         startPanel = CreatePanel("StartMenu_Panel", new Color(0, 0, 0, 0.7f));
+
         // Pause menu
         pausePanel = CreatePanel("PauseMenu_Panel", new Color(0, 0, 0, 0.7f));
         pausePanel.SetActive(false);
+
         // Game over
         gameOverPanel = CreatePanel("GameOver_Panel", new Color(0, 0, 0, 0.8f));
         gameOverPanel.SetActive(false);
@@ -47,6 +53,7 @@ public class UIBootstrapper : MonoBehaviour
 
     GameObject CreatePanel(string name, Color bgColor)
     {
+        // Helper to generate a full-screen panel with a background color
         GameObject panelGO = new GameObject(name, typeof(RectTransform), typeof(Image));
         panelGO.transform.SetParent(canvasGO.transform, false);
 
@@ -64,6 +71,7 @@ public class UIBootstrapper : MonoBehaviour
 
     void CreateHealthBar()
     {
+        // Build a simple health bar UI and attach the HealthBar script
         // Background
         GameObject bgGO = new GameObject("HealthBar_BG", typeof(RectTransform), typeof(Image));
         bgGO.transform.SetParent(hudPanel.transform, false);
@@ -96,20 +104,22 @@ public class UIBootstrapper : MonoBehaviour
         fillImage.fillAmount = 1f;
 
         // HealthBar logic
-        healthBar = bgGO.AddComponent<HealthBar>();
+        healthBar = bgGO.AddComponent<HealthBar>();  // or SimpleHealthBar
         healthBar.fillImage = fillImage;
         healthBar.maxHealth = maxHealth;
-        healthBar.SetHealth(maxHealth);
+        healthBar.SetHealth(maxHealth);              // adjust if your class uses a different API
     }
 
-    void CreateUIManager()
+    void CreateGameManager()
     {
-        GameObject uiManagerGO = new GameObject("UI_Manager");
-        uiManager = uiManagerGO.AddComponent<GameUIManager>();
+        // Instantiate GameManager and hook up the runtime-generated UI references
+        GameObject gmGO = new GameObject("GameManagerObject");
+        gameManager = gmGO.AddComponent<GameManager>();
 
-        uiManager.hudPanel = hudPanel;
-        uiManager.startMenuPanel = startPanel;
-        uiManager.pauseMenuPanel = pausePanel;
-        uiManager.gameOverPanel = gameOverPanel;
+        // Wire the runtime-created panels into GameManager
+        gameManager.hudGroup      = hudPanel;
+        gameManager.startScreen   = startPanel;
+        gameManager.pauseScreen   = pausePanel;
+        gameManager.gameOverScreen = gameOverPanel;
     }
 }

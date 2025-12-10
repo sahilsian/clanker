@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "name": "CharacterControls",
+    "maps": [
+        {
+            "name": "Player",
+            "id": "8a513cb2-b532-42a4-9d77-fd3032320f12",
+            "actions": [
+                {
+                    "name": "EquipWeapon",
+                    "type": "Button",
+                    "id": "23f907b9-35fa-48e5-9f62-a5c984bea67f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "b1830fb2-9d49-47ef-bb33-e1b7dd0cafc5",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "EquipWeapon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

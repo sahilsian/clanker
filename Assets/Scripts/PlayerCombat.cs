@@ -100,6 +100,13 @@ public class PlayerCombat : MonoBehaviour
             {
                 boss.TakeDamage(damage, attackType);
             }
+
+            // 3. Check for Boss2
+            Boss2 boss2 = hit.GetComponent<Boss2>();
+            if (boss2 != null)
+            {
+                boss2.TakeDamage(damage, attackType);
+            }
         }
     }
 

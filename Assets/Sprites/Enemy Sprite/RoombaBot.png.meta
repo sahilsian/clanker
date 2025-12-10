@@ -1,10 +1,22 @@
 fileFormatVersion: 2
-guid: a0914a217586fa946a323a9febf1d0c1
+guid: 42f6fb4689e195b4f91fb97ffa9d4481
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4644021258956144335
-    second: Player Sprite_0
+      213: -3689889552428962000
+    second: RoombaBot_0
+  - first:
+      213: 1443208085495823957
+    second: RoombaBot_1
+  - first:
+      213: 7742476744032530730
+    second: RoombaBot_2
+  - first:
+      213: 1396118097636481904
+    second: RoombaBot_3
+  - first:
+      213: 6584916376809681643
+    second: RoombaBot_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +63,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 260
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,13 +125,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Player Sprite_0
+      name: RoombaBot_0
       rect:
         serializedVersion: 2
-        x: 145
-        y: 27
-        width: 810
-        height: 958
+        x: 290
+        y: 823
+        width: 13
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +140,96 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1318e82254f1d8fb0800000000000000
-      internalID: -4644021258956144335
+      spriteID: 03feb0f7001eaccc0800000000000000
+      internalID: -3689889552428962000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoombaBot_1
+      rect:
+        serializedVersion: 2
+        x: 245
+        y: 796
+        width: 17
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55e33f87b1e470410800000000000000
+      internalID: 1443208085495823957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoombaBot_2
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 772
+        width: 17
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2138c9c39dc27b60800000000000000
+      internalID: 7742476744032530730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoombaBot_3
+      rect:
+        serializedVersion: 2
+        x: 328
+        y: 806
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07bdd1a4302006310800000000000000
+      internalID: 1396118097636481904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoombaBot_4
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 185
+        width: 823
+        height: 614
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be2b46b6e82526b50800000000000000
+      internalID: 6584916376809681643
       vertices: []
       indices: 
       edges: []
@@ -148,7 +248,11 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Player Sprite_0: -4644021258956144335
+      RoombaBot_0: -3689889552428962000
+      RoombaBot_1: 1443208085495823957
+      RoombaBot_2: 7742476744032530730
+      RoombaBot_3: 1396118097636481904
+      RoombaBot_4: 6584916376809681643
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
